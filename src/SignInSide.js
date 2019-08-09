@@ -1,25 +1,20 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import ButtonSubmit from './components/ButtonSubmit';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import blue from '@material-ui/core/colors/blue';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import * as LinkRouter from "react-router-dom";
-import axios from 'axios'
+
+import SignInForm from './components/SignInForm'
 
 const theme = createMuiTheme({
     palette: {
@@ -97,33 +92,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-function handleSubmit(event){
-
-        
-  const email = event.target.email;
-  const password = event.target.password;
-
-  console.log(email);
-
-  axios.post('/user', {
-      firstName: email,
-      lastName: password
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-  event.preventDefault();
-  return;
-}
-
 export default function SignInSide (props) {
-  
-
   const classes = useStyles();
     return (
       <ThemeProvider theme={theme}>
@@ -138,54 +107,10 @@ export default function SignInSide (props) {
               <Typography component="h1" variant="h5">
                   Sign in
               </Typography>
-              <form className={classes.form} onSubmit={(e) => this.handleSubmit(e)} noValidate>
-                  <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  />
-                  <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  />
-                  <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                  />
-                  <ButtonSubmit mClass={classes.submit}/>
-                  <Grid container>
-                  <Grid item xs>
-                      <Link href="#" variant="body2">
-                      Forgot password?
-                      </Link>
-                  </Grid>
-                  <Grid item>
-                      <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                      </Link>
-                  </Grid>
-                  </Grid>
-                  <Box mt={5}>
-                  <MadeWithLove />
-                  </Box>
-              </form>
+              <SignInForm classes={classes}/>
               </div>
           </Grid>
           </Grid>
       </ThemeProvider>
     );
-  
 }

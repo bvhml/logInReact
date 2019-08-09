@@ -1,6 +1,13 @@
 const express = require("express");
 const bodyParser = require('body-parser');
+var cors = require('cors');
 const app = express();
+
+
+
+
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -43,6 +50,20 @@ app.post('/usuario', function (req, res) {
       };
      }
     }
+    
+    res.send(respuesta);
+   });
+
+   app.get('/', function (req, res) {
+    
+      
+      respuesta = {
+       error: false,
+       codigo: 200,
+       mensaje: 'GET OK'
+      };
+    
+    
     
     res.send(respuesta);
    });
