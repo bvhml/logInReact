@@ -6,7 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
+import AlertDialog from './AlertDialog'
 
 export default class SignInForm extends React.Component{
     constructor(props){
@@ -15,6 +15,8 @@ export default class SignInForm extends React.Component{
         this.state ={
             email:'',
             password:'',
+            response:'',
+            showDialog:false,
         };
     }
 
@@ -27,34 +29,39 @@ export default class SignInForm extends React.Component{
           nombre: email,
           apellido: password
         })
-        .then(function (response) {
+        .then( response => {
           console.log(response);
+          this.setState({response:response});
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
+          this.setState({response:error});
         });
-   
-      
+
+
         this.setState({
             email:email,
             password:password,
+            showDialog:true
         });
 
+        
         event.preventDefault();
         return;
       }
     
+      componentDidUpdate(){
+        console.log(this.state.showDialog);
+      }
+
+      
+
     render(){
         const {classes} = this.props;
-        const {email,password} = this.state;
-
-        console.log(email);
-        console.log(password);
-
 
         return(
             
-            <form className={classes.form} onSubmit={(e) => this.handleSubmit(e)} noValidate>
+            <form className={classes.form} onSubmit={e => this.handleSubmit(e)} noValidate>
                   <TextField
                   variant="outlined"
                   margin="normal"
@@ -81,6 +88,7 @@ export default class SignInForm extends React.Component{
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                   />
+                  <AlertDialog Response={this.state.response} ShowDialog={this.state.showDialog}/>
                   <ButtonSubmit classes={classes.submit}/>
                   <Grid container>
                   <Grid item xs>
