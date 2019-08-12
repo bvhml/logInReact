@@ -6,20 +6,32 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
-import AlertDialog from './AlertDialog'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default class SignInForm extends React.Component{
     constructor(props){
         super(props);
-
         this.state ={
             email:'',
             password:'',
-            response:'',
+            messageDialog:'',
             showDialog:false,
         };
+
+        this.handleClose = this.handleClose.bind(this);
     }
 
+    
     handleSubmit(event){
 
         const email = event.target.email.value;
@@ -30,21 +42,23 @@ export default class SignInForm extends React.Component{
           apellido: password
         })
         .then( response => {
-          console.log(response);
-          this.setState({response:response});
+          //console.log(response);
+            this.setState({
+              email:email,
+              password:password,
+              messageDialog:response.data.mensaje,
+              showDialog:true
+          });
         })
         .catch((error) => {
-          console.log(error);
-          this.setState({response:error});
+          //console.log(error);
+            this.setState({
+              email:email,
+              password:password,
+              messageDialog:error.data.mensaje,
+              showDialog:true
+          });
         });
-
-
-        this.setState({
-            email:email,
-            password:password,
-            showDialog:true
-        });
-
         
         event.preventDefault();
         return;
@@ -52,6 +66,14 @@ export default class SignInForm extends React.Component{
     
       componentDidUpdate(){
         console.log(this.state.showDialog);
+        //alert(this.state.messageDialog.data);
+      }
+
+    
+      handleClose() { 
+        this.setState({
+          showDialog:false
+        });
       }
 
       
@@ -88,7 +110,25 @@ export default class SignInForm extends React.Component{
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                   />
-                  <AlertDialog Response={this.state.response} ShowDialog={this.state.showDialog}/>
+                  <Dialog
+                    open={this.state.showDialog}
+                    onClose={this.handleClose}
+                    TransitionComponent={Transition}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">{"Attention!"}</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {this.state.messageDialog}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={this.handleClose} color="primary" autoFocus>
+                        Dismiss
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                   <ButtonSubmit classes={classes.submit}/>
                   <Grid container>
                   <Grid item xs>

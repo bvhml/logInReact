@@ -28,14 +28,14 @@ app.post('/usuario', function (req, res) {
      respuesta = {
       error: true,
       codigo: 502,
-      mensaje: 'El campo nombre y apellido son requeridos'
+      mensaje: 'Username and Password required.'
      };
     } else {
      if(usuario.nombre !== '' || usuario.apellido !== '') {
       respuesta = {
        error: true,
        codigo: 503,
-       mensaje: 'El usuario ya fue creado previamente'
+       mensaje: 'The user had been created previously, try with a different username.'
       };
      } else {
       usuario = {
@@ -45,7 +45,7 @@ app.post('/usuario', function (req, res) {
       respuesta = {
        error: false,
        codigo: 200,
-       mensaje: 'Usuario creado',
+       mensaje: 'User created successfully.',
        respuesta: usuario
       };
      }

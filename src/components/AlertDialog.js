@@ -6,37 +6,51 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function AlertDialog(props) {
-  const [open, setOpen] = React.useState(props.ShowDialog);
-
-  function handleClickOpen() {
-    setOpen(true);
+export default class AlertDialog extends React.Component {
+  //const [open, setOpen] = React.useState(props.ShowDialog);
+  constructor(props){
+    super(props);
+    this.state = {open:false};
+    this.handleClose = this.handleClose.bind(this);
+    this.handleClickOpen = this.handleClickOpen.bind(this);
   }
 
-  function handleClose() {
-    setOpen(false);
+  handleClickOpen() {
+    this.setState({
+      open:true
+    });
   }
 
-  return (
-    <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Attention!"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {props.Response.data}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Dismiss
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+  handleClose() {
+    this.setState({
+      open:false
+    });
+  }
+
+  
+
+  render(){
+    return (
+      <div>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Attention!"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {this.props.messageDialog}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary" autoFocus>
+              Dismiss
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }  
 }
