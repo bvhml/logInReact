@@ -13,10 +13,35 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
+import FormValidator from './FormValidator'
+import validator from 'validator'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+export const validatorArg = new FormValidator([
+  {
+    field: 'email',
+    method: validator.isEmpty,
+    validWhen: false,
+    message: 'Please provide an email address.'
+  },
+  { 
+    field: 'email',
+    method: validator.isEmail,
+    validWhen: true,
+    message: 'That is not a valid email.'
+  },
+  { 
+    field: 'password',
+    method: validator.isEmpty,
+    validWhen: false,
+    message: 'Email and Password required.'
+  }
+]);
+
+var  validationResponse =  {email:false,password:false};
 
 export default class SignInForm extends React.Component{
     constructor(props){
@@ -29,6 +54,8 @@ export default class SignInForm extends React.Component{
         };
 
         this.handleClose = this.handleClose.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        
     }
 
     
@@ -36,40 +63,51 @@ export default class SignInForm extends React.Component{
 
         const email = event.target.email.value;
         const password = event.target.password.value;
-
-        axios.post('http://localhost/usuario', {
-          nombre: email,
-          apellido: password
-        })
-        .then( response => {
-          //console.log(response);
-            this.setState({
-              email:email,
-              password:password,
-              messageDialog:response.data.mensaje,
-              showDialog:true
-          });
-        })
-        .catch((error) => {
-          //console.log(error);
-            this.setState({
-              email:email,
-              password:password,
-              messageDialog:error.data.mensaje,
-              showDialog:true
-          });
-        });
         
-        event.preventDefault();
-        return;
+          axios.post('http://localhost/usuario', {
+            nombre: email,
+            apellido: password
+          })
+          .then( response => {
+            //console.log(response);
+              this.setState({
+                email:email,
+                password:password,
+                messageDialog:response.data.mensaje,
+                showDialog:true
+            });
+
+            const validation = validatorArg.validate(this.state);
+            validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
+            if (!validationResponse.email & !validationResponse.password){
+              console.log("TODO BIEN");
+            }
+          })
+          .catch((error) => {
+            //console.log(error);
+              this.setState({
+                email:email,
+                password:password,
+                messageDialog:error.data.mensaje,
+                showDialog:true
+            });
+
+            const validation = validatorArg.validate(this.state);
+            validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
+            if (!validationResponse.email & !validationResponse.password){
+              console.log("TODO BIEN");
+            }
+          });
+
+        
+      event.preventDefault();
+      return;
+
       }
     
       componentDidUpdate(){
-        console.log(this.state.showDialog);
-        //alert(this.state.messageDialog.data);
       }
-
-    
+      
       handleClose() { 
         this.setState({
           showDialog:false
@@ -80,13 +118,14 @@ export default class SignInForm extends React.Component{
 
     render(){
         const {classes} = this.props;
-
+        
+        
         return(
             
-            <form className={classes.form} onSubmit={e => this.handleSubmit(e)} noValidate>
+            <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
                   <TextField
                   variant="outlined"
-                  margin="normal"
+                  margin="dense"
                   required
                   fullWidth
                   id="email"
@@ -94,10 +133,11 @@ export default class SignInForm extends React.Component{
                   name="email"
                   autoComplete="email"
                   autoFocus
+                  error={validationResponse.email}
                   />
                   <TextField
                   variant="outlined"
-                  margin="normal"
+                  margin="dense"
                   required
                   fullWidth
                   name="password"
@@ -105,6 +145,7 @@ export default class SignInForm extends React.Component{
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  error={validationResponse.password}
                   />
                   <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
