@@ -55,7 +55,7 @@ let useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.dark,
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    //backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -136,6 +136,10 @@ export default function SignInSide (props) {
               backgroundColor:'#303030',
             },
             
+          },
+          MuiTextField:{
+            root:{
+              color:'white',            }
           },
         },
         palette: {
