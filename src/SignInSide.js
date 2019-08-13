@@ -11,21 +11,14 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import blue from '@material-ui/core/colors/blue';
 import deepOrange from '@material-ui/core/colors/deepOrange';
+import Icon from '@material-ui/core/Icon';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import * as LinkRouter from "react-router-dom";
-
 import SignInForm from './components/SignInForm'
+import Switch from '@material-ui/core/Switch';
 
-const theme = createMuiTheme({
-    palette: {
-      primary: blue,
-      secondary: deepOrange,
-    },
-    status: {
-      danger: 'orange',
-    },
-  });
-
+let theme = createMuiTheme({});
+let themeName = 'Light';
 function MadeWithLove() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -55,10 +48,11 @@ function About() {
 }
 
 
-const useStyles = makeStyles(theme => ({
+let useStyles = makeStyles(theme => ({
   root: {
     height: '100vh',
-    padding: '100px'
+    padding: '10vw',
+    backgroundColor: theme.palette.dark,
   },
   image: {
     backgroundImage: 'url(https://source.unsplash.com/random)',
@@ -67,10 +61,13 @@ const useStyles = makeStyles(theme => ({
     backgroundPosition: 'center',
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(8, 1), //8,1
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  paperContainer: {
+    backgroundColor:'#303030',
   },
   avatar: {
     margin: theme.spacing(1),
@@ -90,12 +87,94 @@ const useStyles = makeStyles(theme => ({
   status: {
     danger: 'orange',
   },
+  icon: {
+    fontSize: 100,
+    color:'#273c75'
+  },
+  dialogContent:{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 }));
+
+
 
 export default function SignInSide (props) {
   const classes = useStyles();
+  
+  const [state, setState] = React.useState({
+    checkedA: false,
+    checkedB: false,
+  });
+
+  const handleChange = name => event => {
+    setState({ ...state, [name]: event.target.checked });
+
+    if (event.target.checked) {
+      themeName = 'Dark';
+      theme = createMuiTheme({
+        overrides: {
+          // Style sheet name ⚛️
+          MuiButton: {
+            root: {
+              backgroundColor:'#303030',
+              border: 0,
+              color: 'white',
+              //boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+            },
+          },
+          MuiPaper:{
+            root: {
+              backgroundColor:'#303030',
+              color:'white',
+              boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+            },
+          },
+          MuiGrid:{
+            item:{
+              backgroundColor:'#303030',
+            },
+            
+          },
+        },
+        palette: {
+          primary: blue,
+          secondary: deepOrange,
+          dark:'#303030',
+        },
+        status: {
+          danger: 'orange',
+        },
+        paper: {
+          margin: theme.spacing(8, 1), //8,1
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          backgroundColor:'#303030',
+        },
+        paperContainer: {
+          backgroundColor:'#303030',
+        },
+      });
+    }
+    else{
+      themeName = 'Light';
+      theme = createMuiTheme({});
+    }
+
+  };
+
+  
     return (
       <ThemeProvider theme={theme}>
+          <Switch
+            checked={state.checkedB}
+            onChange={handleChange('checkedB')}
+            value="checkedB"
+            color="primary"
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />{themeName}
           <Grid container component="main" className={classes.root} fixed = {'true'}>
           <CssBaseline />
           <Grid item xs={false} sm={5} md={7} className={classes.image} />

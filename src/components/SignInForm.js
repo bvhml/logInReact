@@ -15,7 +15,8 @@ import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
 import FormValidator from './FormValidator'
 import validator from 'validator'
-
+import HighlightOff from '@material-ui/icons/HighlightOff'
+import Info from '@material-ui/icons/Info'
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -55,16 +56,23 @@ export default class SignInForm extends React.Component{
 
         this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
+        this.emailInput = React.createRef();
         
     }
 
-    
+    focusInput(component) {
+      if (component) {
+          React.findDOMNode(component).focus(); 
+      }
+    }
+
     handleSubmit(event){
 
         const email = event.target.email.value;
         const password = event.target.password.value;
         
-          axios.post('http://localhost/usuario', {
+          axios.post('http://172.20.10.4/usuario', {
             nombre: email,
             apellido: password
           })
@@ -79,8 +87,17 @@ export default class SignInForm extends React.Component{
 
             const validation = validatorArg.validate(this.state);
             validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
-            if (!validationResponse.email & !validationResponse.password){
+
+            if (validation.isValid) {
               console.log("TODO BIEN");
+            }
+            else{
+              //if is Invalid
+              if (validationResponse.email) { 
+              }
+              else if (validationResponse.password) {
+                
+              }
             }
           })
           .catch((error) => {
@@ -94,8 +111,18 @@ export default class SignInForm extends React.Component{
 
             const validation = validatorArg.validate(this.state);
             validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
-            if (!validationResponse.email & !validationResponse.password){
+            
+            if (validation.isValid) {
               console.log("TODO BIEN");
+            }
+            else{
+              //if is Invalid
+              if (validationResponse.email) {
+                
+              }
+              else if (validationResponse.password) {
+                
+              }
             }
           });
 
@@ -106,8 +133,17 @@ export default class SignInForm extends React.Component{
       }
     
       componentDidUpdate(){
+
+        
+        if (validationResponse.email) {
+          //console.log(this.emailInput.current);
+           
+        }
+        else if (validationResponse.password) {
+          
+        }
       }
-      
+
       handleClose() { 
         this.setState({
           showDialog:false
@@ -134,6 +170,7 @@ export default class SignInForm extends React.Component{
                   autoComplete="email"
                   autoFocus
                   error={validationResponse.email}
+                  inputRef={this.emailInput}
                   />
                   <TextField
                   variant="outlined"
@@ -159,8 +196,10 @@ export default class SignInForm extends React.Component{
                     aria-describedby="alert-dialog-description"
                   >
                     <DialogTitle id="alert-dialog-title">{"Attention!"}</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText id="alert-dialog-description">
+                    <DialogContent className={classes.dialogContent}>
+                    <Info className={classes.icon} />
+                      <DialogContentText id="alert-dialog-description" >
+                        
                         {this.state.messageDialog}
                       </DialogContentText>
                     </DialogContent>
@@ -170,7 +209,7 @@ export default class SignInForm extends React.Component{
                       </Button>
                     </DialogActions>
                   </Dialog>
-                  <ButtonSubmit classes={classes.submit}/>
+                  <ButtonSubmit classes={classes}/>
                   <Grid container>
                   <Grid item xs>
                       <Link href="#" variant="body2">
@@ -183,7 +222,6 @@ export default class SignInForm extends React.Component{
                       </Link>
                   </Grid>
                   </Grid>
-                  
               </form>
         );
     }
