@@ -16,9 +16,11 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 import * as LinkRouter from "react-router-dom";
 import SignInForm from './components/SignInForm'
 import Switch from '@material-ui/core/Switch';
+import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 let theme = createMuiTheme({});
-let themeName = 'Light';
+let themeName = 'Dark';
 function MadeWithLove() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -50,9 +52,8 @@ function About() {
 
 let useStyles = makeStyles(theme => ({
   root: {
-    height: '100vh',
-    padding: '10vw',
-    backgroundColor: theme.palette.dark,
+    
+    padding: '8vh',
   },
   image: {
     //backgroundImage: 'url(https://source.unsplash.com/random)',
@@ -98,15 +99,95 @@ let useStyles = makeStyles(theme => ({
   },
 }));
 
-
+//--------------------DARK THEME--------------------
+theme = createMuiTheme({
+  overrides: {
+    // Style sheet name ⚛️
+    MuiButton: {
+      root: {
+        backgroundColor:'#303030',
+        border: 0,
+        color: 'white',
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+      },
+    },
+    MuiPaper:{
+      root: {
+        backgroundColor:'#303030',
+        color:'white',
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+      },
+    },
+    MuiGrid:{
+      root:{
+        backgroundColor:'#2b2a2a',
+      },
+      item:{
+        backgroundColor:'#303030',
+      },
+      
+    },
+    MuiTextField:{
+      root:{
+        color :'white',   
+        borderColor:blue,           
+      },
+    },
+    MuiInputLabel: { // Name of the component ⚛️ / style sheet
+      root: { // Name of the rule
+        color: "white",
+        borderColor:"white",
+        "&$focused": { // increase the specificity for the pseudo class
+          color: "white"
+        }
+      }
+    },
+    MuiOutlinedInput:{
+      root:{
+        color:'white',
+        borderColor:"white",
+      },
+      
+      notchedOutline: {
+        borderWidth: "1px",
+        borderColor: blue[400],
+        '&$hover': {
+          borderColor:"white",
+          borderWidth: 2,
+        },
+      },
+    },
+    
+  },
+  palette: {
+    primary: blue,
+    secondary: deepOrange,
+    dark:'#303030',
+  },
+  status: {
+    danger: 'orange',
+  },
+  paper: {
+    margin: theme.spacing(8, 1), //8,1
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor:'#303030',
+  },
+  paperContainer: {
+    backgroundColor:'#303030',
+  },
+});
 
 export default function SignInSide (props) {
-  const classes = useStyles();
   
+  const classes = useStyles();
   const [state, setState] = React.useState({
     checkedA: false,
-    checkedB: false,
+    checkedB: true,
   });
+
+  //const [greeting, setGreeting] = React.useState('Hello World');
 
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.checked });
@@ -118,10 +199,8 @@ export default function SignInSide (props) {
           // Style sheet name ⚛️
           MuiButton: {
             root: {
-              backgroundColor:'#303030',
-              border: 0,
               color: 'white',
-              //boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+              backgroundColor:blue,
             },
           },
           MuiPaper:{
@@ -132,6 +211,9 @@ export default function SignInSide (props) {
             },
           },
           MuiGrid:{
+            root:{
+              backgroundColor:'#2b2a2a',
+            },
             item:{
               backgroundColor:'#303030',
             },
@@ -139,7 +221,29 @@ export default function SignInSide (props) {
           },
           MuiTextField:{
             root:{
-              color:'white',            }
+              color :'white',   
+              borderColor:blue,           
+            },
+          },
+          MuiInputLabel: { // Name of the component ⚛️ / style sheet
+            root: { // Name of the rule
+              color: "white",
+              borderColor:"white",
+              "&$focused": { // increase the specificity for the pseudo class
+                color: "white"
+              }
+            }
+          },
+          MuiOutlinedInput:{
+            root:{
+              color:'white',
+              borderColor:"white",
+            },
+            notchedOutline: {
+              borderWidth: "1px",
+              borderColor: theme.palette.primary.main,
+              
+            },
           },
         },
         palette: {
@@ -164,26 +268,40 @@ export default function SignInSide (props) {
     }
     else{
       themeName = 'Light';
-      theme = createMuiTheme({});
+      theme = createMuiTheme({
+          palette: {
+          primary: blue,
+          secondary: deepOrange,
+          dark:'#303030',
+        },
+      });
     }
 
   };
-
-  
     return (
+      
       <ThemeProvider theme={theme}>
-          <Switch
+          <Grid container component="main" className={classes.root} fixed = {'true'}>
+          <CssBaseline />
+          <Grid item xs={false} sm={5} md={7} component={Paper} className={classes.image} elevation={7} square/>
+          <Grid item xs={12} sm={7} md={5} component={Paper} elevation={7} square >
+          <Grid container item justify="flex-end" direction="row">
+          
+          <FormControlLabel
+          value="top"
+          control={<Switch
             checked={state.checkedB}
             onChange={handleChange('checkedB')}
             value="checkedB"
             color="primary"
             inputProps={{ 'aria-label': 'primary checkbox' }}
-          />{themeName}
-          <Grid container component="main" className={classes.root} fixed = {'true'}>
-          <CssBaseline />
-          <Grid item xs={false} sm={5} md={7} className={classes.image} />
-          <Grid item xs={12} sm={7} md={5} component={Paper} elevation={7} square>
-              <div className={classes.paper} spacing={5}>
+          />}
+          label={themeName}
+          labelPlacement="bottom"
+        />
+          
+          </Grid>
+           <div className={classes.paper} spacing={5}>
               <Avatar className={classes.avatar}>
                   <LockOutlinedIcon />
               </Avatar>
@@ -191,7 +309,7 @@ export default function SignInSide (props) {
                   Sign in
               </Typography>
               <SignInForm classes={classes}/>
-              </div>
+            </div>
           </Grid>
           </Grid>
       </ThemeProvider>

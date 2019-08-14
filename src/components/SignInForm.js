@@ -171,6 +171,7 @@ export default class SignInForm extends React.Component{
                   autoFocus
                   error={validationResponse.email}
                   inputRef={this.emailInput}
+                  
                   />
                   <TextField
                   variant="outlined"
