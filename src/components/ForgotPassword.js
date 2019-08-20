@@ -21,7 +21,7 @@ import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import * as LinkRouter from "react-router-dom";
-
+import Help from '@material-ui/icons/Help';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -50,7 +50,7 @@ export const validatorArg = new FormValidator([
 
 var  validationResponse =  {email:false,password:false};
 
-export default class SignInForm extends React.Component{
+export default class ForgotPassword extends React.Component{
     constructor(props){
         super(props);
         this.state ={
@@ -164,10 +164,10 @@ export default class SignInForm extends React.Component{
         return(
             <div className={classes.paper} spacing={5}>
               <Avatar className={classes.avatar}>
-                  <LockOutlinedIcon />
+                  <Help/>
               </Avatar>
               <Typography component="h1" variant="h5">
-                  Sign in
+                  Forgot Password
               </Typography>
              
             
@@ -186,22 +186,7 @@ export default class SignInForm extends React.Component{
                     inputRef={this.emailInput}
                     
                     />
-                    <TextField
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    error={validationResponse.password}
-                    />
-                    <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                    />
+
                     <Dialog
                       open={this.state.showDialog}
                       onClose={this.handleClose}
@@ -226,12 +211,6 @@ export default class SignInForm extends React.Component{
                     <ButtonSubmit classes={classes}/>
                     <Grid container>
                     <Grid item xs>
-
-                    <LinkRouter.Link to="/ForgotPassword">
-                        <Link href="#" variant="body2">
-                        Forgot password?
-                        </Link>
-                    </LinkRouter.Link>
                     </Grid>
                     <Grid item>
                         <Link href="#" variant="body2">

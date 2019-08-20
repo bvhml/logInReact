@@ -1,11 +1,9 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -15,48 +13,21 @@ import Icon from '@material-ui/core/Icon';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import * as LinkRouter from "react-router-dom";
 import SignInForm from './components/SignInForm'
+import ForgotPassword from './components/ForgotPassword'
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 let theme = createMuiTheme({});
 let themeName = 'Dark';
-function MadeWithLove() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Built with love by the '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Material-UI
-      </Link>
-      {' team.'}
-    </Typography>
-  );
-}
-
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
-
-function About() {
-  return (
-    <div>
-      <h2>About</h2>
-    </div>
-  );
-}
-
 
 let useStyles = makeStyles(theme => ({
   root: {
-    
+    height:'100vh',
     padding: '8vh',
   },
   image: {
-    //backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -189,6 +160,14 @@ export default function SignInSide (props) {
 
   //const [greeting, setGreeting] = React.useState('Hello World');
 
+
+  function SignInFormRoute(){
+    return <SignInForm classes={classes}/>
+  }  
+
+  function ForgotPasswordRoute(){
+    return <ForgotPassword classes={classes}/>
+  }  
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.checked });
 
@@ -279,14 +258,12 @@ export default function SignInSide (props) {
 
   };
     return (
-      
       <ThemeProvider theme={theme}>
           <Grid container component="main" className={classes.root} fixed = {'true'}>
           <CssBaseline />
           <Grid item xs={false} sm={5} md={7} component={Paper} className={classes.image} elevation={7} square/>
           <Grid item xs={12} sm={7} md={5} component={Paper} elevation={7} square >
           <Grid container item justify="flex-end" direction="row">
-          
           <FormControlLabel
           value="top"
           control={<Switch
@@ -301,15 +278,13 @@ export default function SignInSide (props) {
         />
           
           </Grid>
-           <div className={classes.paper} spacing={5}>
-              <Avatar className={classes.avatar}>
-                  <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                  Sign in
-              </Typography>
-              <SignInForm classes={classes}/>
-            </div>
+          <Router>
+
+            <Route path="/" exact component={SignInFormRoute}/>
+            <Route path="/ForgotPassword" exact component={ForgotPasswordRoute}/>
+
+
+          </Router>
           </Grid>
           </Grid>
       </ThemeProvider>
