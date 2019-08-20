@@ -227,7 +227,7 @@ export default class SignInForm extends React.Component{
                     </LinkRouter.Link>
                     </Grid>
                     <Grid item>
-                      <LinkRouter.Link to="/SignUp" variant="body2" component={Link} className={classes.Link}>
+                      <LinkRouter.Link to="/register" variant="body2" component={Link} className={classes.Link}>
                         Don't have an account? Sign Up
                       </LinkRouter.Link>
                     </Grid>

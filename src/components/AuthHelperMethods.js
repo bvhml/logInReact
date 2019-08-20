@@ -83,7 +83,7 @@ export default class AuthHelperMethods {
     })
       .then(this._checkStatus)
       .then(response => response.json());
-  };
+};
 
   _checkStatus = response => {
     // raises an error in case response status is not a success

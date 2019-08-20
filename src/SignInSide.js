@@ -8,10 +8,9 @@ import { ThemeProvider } from '@material-ui/styles';
 import blue from '@material-ui/core/colors/blue';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 import { BrowserRouter as Router, Route} from "react-router-dom";
-import * as LinkRouter from "react-router-dom";
 import SignInForm from './components/SignInForm'
 import ForgotPassword from './components/ForgotPassword'
-import SignUp from './components/SignUp'
+import Register from './components/Register'
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
@@ -169,8 +168,8 @@ export default function SignInSide (props) {
     return <ForgotPassword classes={classes}/>
   }  
 
-  function SignUpRoute(){
-    return <SignUp classes={classes}/>
+  function RegisterRoute(){
+    return <Register classes={classes}/>
   }  
 
   
@@ -284,11 +283,11 @@ export default function SignInSide (props) {
         />
           </Grid>
           <Router>
-            <LinkRouter.Switch>
+       
             <Route path="/" exact component={SignInFormRoute}/>
             <Route path="/ForgotPassword"  component={ForgotPasswordRoute}/>
-            <Route path="/SignUp"  component={SignUpRoute}/>
-            </LinkRouter.Switch>
+            <Route path="/register"  component={RegisterRoute}/>
+         
           </Router>
           </Grid>
           </Grid>

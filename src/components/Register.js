@@ -43,12 +43,14 @@ export const validatorArg = new FormValidator([
 
 var  validationResponse =  {email:false,password:false};
 
-export default class SignUp extends React.Component{
+export default class Register extends React.Component{
     constructor(props){
         super(props);
         this.state ={
             email:'',
             password:'',
+            nombre:'',
+            apellido:'',
             messageDialog:'',
             showDialog:false,
         };
@@ -69,7 +71,9 @@ export default class SignUp extends React.Component{
 
         const email = event.target.email.value;
         const password = event.target.password.value;
-        
+        const nombre = event.target.nombre.value;
+        const apellido = event.target.apellido.value;
+
           axios.post('http://172.20.10.4/usuario', {
             nombre: email,
             apellido: password
@@ -160,7 +164,7 @@ export default class SignUp extends React.Component{
                   <Help/>
               </Avatar>
               <Typography component="h1" variant="h5">
-                  Sign Up
+                Register
               </Typography>
              
             
