@@ -1,7 +1,5 @@
 import React from 'react';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,13 +7,12 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import blue from '@material-ui/core/colors/blue';
 import deepOrange from '@material-ui/core/colors/deepOrange';
-import Icon from '@material-ui/core/Icon';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import * as LinkRouter from "react-router-dom";
 import SignInForm from './components/SignInForm'
 import ForgotPassword from './components/ForgotPassword'
+import SignUp from './components/SignUp'
 import Switch from '@material-ui/core/Switch';
-import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 let theme = createMuiTheme({});
@@ -24,7 +21,7 @@ let themeName = 'Dark';
 let useStyles = makeStyles(theme => ({
   root: {
     height:'100vh',
-    padding: '8vh',
+    padding: '6vh',
   },
   image: {
     backgroundImage: 'url(https://source.unsplash.com/random)',
@@ -67,6 +64,9 @@ let useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  Link: {
+    color:blue[400],
   },
 }));
 
@@ -168,6 +168,12 @@ export default function SignInSide (props) {
   function ForgotPasswordRoute(){
     return <ForgotPassword classes={classes}/>
   }  
+
+  function SignUpRoute(){
+    return <SignUp classes={classes}/>
+  }  
+
+  
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.checked });
 
@@ -221,7 +227,6 @@ export default function SignInSide (props) {
             notchedOutline: {
               borderWidth: "1px",
               borderColor: theme.palette.primary.main,
-              
             },
           },
         },
@@ -258,6 +263,7 @@ export default function SignInSide (props) {
 
   };
     return (
+      
       <ThemeProvider theme={theme}>
           <Grid container component="main" className={classes.root} fixed = {'true'}>
           <CssBaseline />
@@ -276,14 +282,13 @@ export default function SignInSide (props) {
           label={themeName}
           labelPlacement="bottom"
         />
-          
           </Grid>
           <Router>
-
+            <LinkRouter.Switch>
             <Route path="/" exact component={SignInFormRoute}/>
-            <Route path="/ForgotPassword" exact component={ForgotPasswordRoute}/>
-
-
+            <Route path="/ForgotPassword"  component={ForgotPasswordRoute}/>
+            <Route path="/SignUp"  component={SignUpRoute}/>
+            </LinkRouter.Switch>
           </Router>
           </Grid>
           </Grid>

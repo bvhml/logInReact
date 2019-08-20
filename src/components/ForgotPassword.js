@@ -1,9 +1,6 @@
 import React from 'react';
-import ButtonSubmit from './ButtonSubmit';
 import axios from 'axios'
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Dialog from '@material-ui/core/Dialog';
@@ -15,12 +12,9 @@ import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
 import FormValidator from './FormValidator'
 import validator from 'validator'
-import HighlightOff from '@material-ui/icons/HighlightOff'
 import Info from '@material-ui/icons/Info'
 import Avatar from '@material-ui/core/Avatar';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import * as LinkRouter from "react-router-dom";
 import Help from '@material-ui/icons/Help';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -208,15 +202,19 @@ export default class ForgotPassword extends React.Component{
                         </Button>
                       </DialogActions>
                     </Dialog>
-                    <ButtonSubmit classes={classes}/>
-                    <Grid container>
-                    <Grid item xs>
-                    </Grid>
-                    <Grid item>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      >
+                      Restore Password
+                    </Button>
+                    <Grid container item >          
                         <Link href="#" variant="body2">
                         {"Don't have an account? Sign Up"}
                         </Link>
-                    </Grid>
                     </Grid>
                 </form>
               </div>

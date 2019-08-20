@@ -1,5 +1,16 @@
 import React from 'react';
 import './App.css';
+import AuthHelperMethods from './components/AuthHelperMethods';
+//Our higher order component
+import withAuth from './components/withAuth';
+
+/* Create a new instance of the 'AuthHelperMethods' component at the top of the class*/
+Auth = new AuthHelperMethods();
+/* Add the following into _handleLogout*/
+_handleLogout = () => {
+  this.Auth.logout()
+  this.props.history.replace('/login');
+}
 
 function App() {
   return (
@@ -22,4 +33,4 @@ function App() {
   );
 }
 
-export default App;
+export default withAuth(App);

@@ -1,9 +1,7 @@
 import React from 'react';
+import axios from 'axios'
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -15,10 +13,8 @@ import FormValidator from './FormValidator'
 import validator from 'validator'
 import Info from '@material-ui/icons/Info'
 import Avatar from '@material-ui/core/Avatar';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import * as LinkRouter from "react-router-dom";
-import AuthHelperMethods from './AuthHelperMethods';
+import Help from '@material-ui/icons/Help';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -47,7 +43,7 @@ export const validatorArg = new FormValidator([
 
 var  validationResponse =  {email:false,password:false};
 
-export default class SignInForm extends React.Component{
+export default class SignUp extends React.Component{
     constructor(props){
         super(props);
         this.state ={
@@ -68,59 +64,68 @@ export default class SignInForm extends React.Component{
           React.findDOMNode(component).focus(); 
       }
     }
-    
-    Auth = new AuthHelperMethods();
-    componentWillMount(){
-      if (this.Auth.loggedIn()){
-        this.props.history.replace('/');
-      }
-    }
+
     handleSubmit(event){
-      event.preventDefault();
 
-      const email = event.target.email.value;
-      const password = event.target.password.value;
-      const validation = validatorArg.validate(this.state);
-      validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
-
-      if (validation.isValid) {
-        console.log("TODO BIEN");
-          this.setState({
-            email:email,
-            password:password,
-            showDialog:true
-        });
-
-        this.Auth.login(this.state.email, this.state.password)
-          .then(res => {
-            if (res === false) {
-              this.setState({
-                messageDialog:"Usuario/Password no son correctos",
-              });
-              return alert("Usuario/Password no son correctos");
-              
-            }
-
-            this.props.history.replace("/");
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        
+          axios.post('http://172.20.10.4/usuario', {
+            nombre: email,
+            apellido: password
           })
-          .catch(err => {
-            this.setState({
-              messageDialog:err,
+          .then( response => {
+            //console.log(response);
+              this.setState({
+                email:email,
+                password:password,
+                messageDialog:response.data.mensaje,
+                showDialog:true
             });
-            alert(err);
+
+            const validation = validatorArg.validate(this.state);
+            validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
+
+            if (validation.isValid) {
+              console.log("TODO BIEN");
+            }
+            else{
+              //if is Invalid
+              if (validationResponse.email) { 
+              }
+              else if (validationResponse.password) {
+                
+              }
+            }
+          })
+          .catch((error) => {
+            //console.log(error);
+              this.setState({
+                email:email,
+                password:password,
+                messageDialog:error.data.mensaje,
+                showDialog:true
+            });
+
+            const validation = validatorArg.validate(this.state);
+            validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
+            
+            if (validation.isValid) {
+              console.log("TODO BIEN");
+            }
+            else{
+              //if is Invalid
+              if (validationResponse.email) {
+                
+              }
+              else if (validationResponse.password) {
+                
+              }
+            }
           });
 
-      }
-      else{
-        //if is Invalid
-        if (validationResponse.email) { 
-        }
-        else if (validationResponse.password) {
-          
-        }
-      }
-      
-      
+        
+      event.preventDefault();
       return;
 
       }
@@ -150,16 +155,48 @@ export default class SignInForm extends React.Component{
         
         
         return(
-            <div className={classes.paper} spacing={5}>
+            <div className={classes.paper} spacing={1}>
               <Avatar className={classes.avatar}>
-                  <LockOutlinedIcon />
+                  <Help/>
               </Avatar>
               <Typography component="h1" variant="h5">
-                  Sign in
+                  Sign Up
               </Typography>
              
             
               <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
+                    <Grid container item spacing={1}>
+                        <Grid item md xs>
+                            <TextField
+                            variant="outlined"
+                            margin="dense"
+                            required
+                            fullWidth
+                            id="nombre"
+                            label="Nombres"
+                            name="nombre"
+                            autoComplete="Nombres"
+                            autoFocus
+                            error={validationResponse.nombre}
+                            inputRef={this.emailInput}
+                            />
+                        </Grid>
+                        <Grid item md xs>
+                            <TextField
+                            variant="outlined"
+                            margin="dense"
+                            required
+                            fullWidth
+                            id="apellido"
+                            label="Apellidos"
+                            name="apellido"
+                            autoComplete="Apellidos"
+                            error={validationResponse.apellido}
+                            inputRef={this.emailInput}
+                            />
+                        </Grid>
+                    </Grid>
+
                     <TextField
                     variant="outlined"
                     margin="dense"
@@ -169,10 +206,8 @@ export default class SignInForm extends React.Component{
                     label="Email Address"
                     name="email"
                     autoComplete="email"
-                    autoFocus
                     error={validationResponse.email}
                     inputRef={this.emailInput}
-                    
                     />
                     <TextField
                     variant="outlined"
@@ -185,10 +220,6 @@ export default class SignInForm extends React.Component{
                     id="password"
                     autoComplete="current-password"
                     error={validationResponse.password}
-                    />
-                    <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
                     />
                     <Dialog
                       open={this.state.showDialog}
@@ -218,20 +249,8 @@ export default class SignInForm extends React.Component{
                       color="primary"
                       className={classes.submit}
                       >
-                      Sign In
+                      Sign Up
                     </Button>
-                    <Grid container>
-                    <Grid item xs>
-                    <LinkRouter.Link to="/ForgotPassword" component={Link} className={classes.Link}>
-                        Forgot password?
-                    </LinkRouter.Link>
-                    </Grid>
-                    <Grid item>
-                      <LinkRouter.Link to="/SignUp" variant="body2" component={Link} className={classes.Link}>
-                        Don't have an account? Sign Up
-                      </LinkRouter.Link>
-                    </Grid>
-                    </Grid>
                 </form>
               </div>
         );
