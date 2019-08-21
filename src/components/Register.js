@@ -16,6 +16,7 @@ import Info from '@material-ui/icons/Info'
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Help from '@material-ui/icons/Help';
+import AuthHelperMethods from './AuthHelperMethods';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -39,10 +40,35 @@ export const validatorArg = new FormValidator([
     method: validator.isEmpty,
     validWhen: false,
     message: 'Email and Password required.'
+  },
+  { 
+    field: 'nombre',
+    method: validator.isNumeric,
+    validWhen: false,
+    message: 'Nombre required.'
+  },
+  ,
+  { 
+    field: 'nombre',
+    method: validator.isEmpty,
+    validWhen: false,
+    message: 'Nombre required.'
+  },
+  { 
+    field: 'apellido',
+    method: validator.isEmpty,
+    validWhen: false,
+    message: 'Apellido required.'
+  },
+  { 
+    field: 'apellido',
+    method: validator.isNumeric,
+    validWhen: false,
+    message: 'Apellido required.'
   }
 ]);
 
-var  validationResponse =  {email:false,password:false};
+
 
 export default class Register extends React.Component{
     constructor(props){
@@ -62,9 +88,18 @@ export default class Register extends React.Component{
         
     }
 
+    validationResponse =  {};
+
     focusInput(component) {
       if (component) {
           React.findDOMNode(component).focus(); 
+      }
+    }
+
+    Auth = new AuthHelperMethods();
+    componentWillMount(){
+      if (this.Auth.loggedIn()){
+        this.props.history.replace('/');
       }
     }
 
@@ -75,59 +110,47 @@ export default class Register extends React.Component{
         const nombre = event.target.nombre.value;
         const apellido = event.target.apellido.value;
 
-          axios.post('http://172.20.10.4/usuario', {
-            nombre: email,
-            apellido: password
-          })
-          .then( response => {
-            //console.log(response);
+        this.setState({
+          email:email,
+          password:password,
+          nombre:nombre,
+          apellido:apellido,
+        });
+
+      const validation = validatorArg.validate({email: email,password: password,nombre: nombre,apellido: apellido});
+
+      this.validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid,nombre:validation.nombre.isInvalid,apellido:validation.apellido.isInvalid}
+
+      if (validation.isValid) {
+        console.log("TODO BIEN");
+          
+        this.Auth.signUp(email, password,nombre,apellido)
+          .then(res => {
+            if (res === false) {
               this.setState({
-                email:email,
-                password:password,
-                messageDialog:response.data.mensaje,
-                showDialog:true
-            });
-
-            const validation = validatorArg.validate(this.state);
-            validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
-
-            if (validation.isValid) {
-              console.log("TODO BIEN");
+                messageDialog:"Usuario/Password no son correctos",
+                showDialog:true,
+              });
+              return alert("Usuario/Password no son correctos");
+              
             }
-            else{
-              //if is Invalid
-              if (validationResponse.email) { 
-              }
-              else if (validationResponse.password) {
-                
-              }
-            }
-          })
-          .catch((error) => {
-            //console.log(error);
-              this.setState({
-                email:email,
-                password:password,
-                messageDialog:error.data.mensaje,
-                showDialog:true
-            });
-
-            const validation = validatorArg.validate(this.state);
-            validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
             
-            if (validation.isValid) {
-              console.log("TODO BIEN");
-            }
-            else{
-              //if is Invalid
-              if (validationResponse.email) {
-                
-              }
-              else if (validationResponse.password) {
-                
-              }
-            }
+            console.log(res);
+            //this.props.history.replace("/");
+          })
+          .catch(err => {
+            alert(err);
           });
+        
+      }
+      else{
+        //if is Invalid
+        if (this.validationResponse.email) { 
+        }
+        else if (this.validationResponse.password) {
+          
+        }
+      }
 
         
       event.preventDefault();
@@ -138,11 +161,11 @@ export default class Register extends React.Component{
       componentDidUpdate(){
 
         
-        if (validationResponse.email) {
+        if (this.validationResponse.email) {
           //console.log(this.emailInput.current);
            
         }
-        else if (validationResponse.password) {
+        else if (this.validationResponse.password) {
           
         }
       }
@@ -182,7 +205,7 @@ export default class Register extends React.Component{
                             name="nombre"
                             autoComplete="Nombres"
                             autoFocus
-                            error={validationResponse.nombre}
+                            error={this.validationResponse.nombre}
                             inputRef={this.emailInput}
                             />
                         </Grid>
@@ -196,7 +219,7 @@ export default class Register extends React.Component{
                             label="Apellidos"
                             name="apellido"
                             autoComplete="Apellidos"
-                            error={validationResponse.apellido}
+                            error={this.validationResponse.apellido}
                             inputRef={this.emailInput}
                             />
                         </Grid>
@@ -211,7 +234,7 @@ export default class Register extends React.Component{
                     label="Email Address"
                     name="email"
                     autoComplete="email"
-                    error={validationResponse.email}
+                    error={this.validationResponse.email}
                     inputRef={this.emailInput}
                     />
                     <TextField
@@ -224,7 +247,7 @@ export default class Register extends React.Component{
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    error={validationResponse.password}
+                    error={this.validationResponse.password}
                     />
                     <Dialog
                       open={this.state.showDialog}

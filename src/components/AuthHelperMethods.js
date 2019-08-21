@@ -19,11 +19,31 @@ export default class AuthHelperMethods {
     return axios.post('http://localhost/users/log-in', {
         email: username,
         password: password
-      },config)
+      })
       .then(this._checkStatus)
       .then(response => response);
 
     }
+
+    signUp = (username, password,nombre,apellido) => {
+      // Get a token from api server using the fetch api
+      var config = {};
+      if (this.loggedIn()) {
+          config = {
+              headers: { Authorization: "bearer " + this.getToken() }
+            };
+      }
+  
+      return axios.post('http://localhost/users/register', {
+          email: username,
+          password: password,
+          nombre:nombre,
+          apellido,apellido,
+        })
+        .then(this._checkStatus)
+        .then(response => response);
+  
+      }
 
   loggedIn = () => {
     // Checks if there is a saved token and it's still valid

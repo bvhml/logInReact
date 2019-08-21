@@ -46,7 +46,7 @@ export const validatorArg = new FormValidator([
   }
 ]);
 
-var  validationResponse =  {email:false,password:false};
+
 
 export default class SignInForm extends React.Component{
     constructor(props){
@@ -64,6 +64,8 @@ export default class SignInForm extends React.Component{
         
     }
 
+    validationResponse =  {};
+
     focusInput(component) {
       if (component) {
           React.findDOMNode(component).focus(); 
@@ -80,7 +82,6 @@ export default class SignInForm extends React.Component{
      
       event.preventDefault();
 
-      
 
       const email = event.target.email.value;
       const password = event.target.password.value;
@@ -96,7 +97,7 @@ export default class SignInForm extends React.Component{
 
     
 
-      validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
+      this.validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
 
       if (validation.isValid) {
         console.log("TODO BIEN");
@@ -123,9 +124,9 @@ export default class SignInForm extends React.Component{
       }
       else{
         //if is Invalid
-        if (validationResponse.email) { 
+        if (this.validationResponse.email) { 
         }
-        else if (validationResponse.password) {
+        else if (this.validationResponse.password) {
           
         }
       }
@@ -138,11 +139,11 @@ export default class SignInForm extends React.Component{
       componentDidUpdate(){
 
         
-        if (validationResponse.email) {
+        if (this.validationResponse.email) {
           //console.log(this.emailInput.current);
            
         }
-        else if (validationResponse.password) {
+        else if (this.validationResponse.password) {
           
         }
       }
@@ -178,7 +179,7 @@ export default class SignInForm extends React.Component{
                     name="email"
                     autoComplete="email"
                     autoFocus
-                    error={validationResponse.email}
+                    error={this.validationResponse.email}
                     inputRef={this.emailInput}
                     
                     />
@@ -192,7 +193,7 @@ export default class SignInForm extends React.Component{
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    error={validationResponse.password}
+                    error={this.validationResponse.password}
                     />
                     <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
