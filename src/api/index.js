@@ -1,21 +1,29 @@
+
+import models, { sequelize } from '../models';
+
 const express = require("express");
 const bodyParser = require('body-parser');
 var cors = require('cors');
 const app = express();
 var pgp = require("pg-promise")(/*options*/);
-var db = pgp("postgres://postgres:NAC4VDH6@localhost:5432/tecgt");
+//var db = pgp("postgres://postgres:NAC4VDH6@localhost:5432/tecgt");
 
-db.one("SELECT $1 AS value", 123)
-    .then(function (data) {
-        console.log("DATA:", data.value);
-    })
-    .catch(function (error) {
-        console.log("ERROR:", error);
-    });
+
+
+
+
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+sequelize.sync().then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log(`Example app listening on port ${process.env.PORT}!`),
+    });
+  });
+
+/*
 let usuario = {
  nombre:'',
  apellido: ''
@@ -77,3 +85,5 @@ app.post('/usuario', function (req, res) {
 app.listen(80, () => {
  console.log("PORT: 80, press Ctrl + C to stop server.");
 });
+
+*/

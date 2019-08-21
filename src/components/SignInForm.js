@@ -146,7 +146,7 @@ export default class SignInForm extends React.Component{
       
 
     render(){
-        const {classes} = this.props;
+        const {classes,handleClick} = this.props;
         
         
         return(
@@ -157,8 +157,6 @@ export default class SignInForm extends React.Component{
               <Typography component="h1" variant="h5">
                   Sign in
               </Typography>
-             
-            
               <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
                     <TextField
                     variant="outlined"
@@ -222,14 +220,14 @@ export default class SignInForm extends React.Component{
                     </Button>
                     <Grid container>
                     <Grid item xs>
-                    <LinkRouter.Link to="/ForgotPassword" component={Link} className={classes.Link}>
+                    <Link href="#" className={classes.Link} onClick={handleClick('forgotPassword')}>
                         Forgot password?
-                    </LinkRouter.Link>
+                    </Link>
                     </Grid>
                     <Grid item>
-                      <LinkRouter.Link to="/register" variant="body2" component={Link} className={classes.Link}>
+                      <Link href="#" variant="body2"  className={classes.Link} onClick={handleClick('register')}>
                         Don't have an account? Sign Up
-                      </LinkRouter.Link>
+                      </Link>
                     </Grid>
                     </Grid>
                 </form>

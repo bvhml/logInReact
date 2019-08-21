@@ -157,22 +157,40 @@ export default function SignInSide (props) {
     checkedB: true,
   });
 
+  const [view, setView] = React.useState(0);
+
   //const [greeting, setGreeting] = React.useState('Hello World');
 
+  const handleClick = name => event => {
+    event.preventDefault();
+
+    if (name === "signIn") {
+      setView(0);
+    }
+    else if (name === "forgotPassword"){
+      setView(1);
+    }
+    else if(name === "register"){
+      setView(2);
+    }
+
+  }
 
   function SignInFormRoute(){
-    return <SignInForm classes={classes}/>
+    return <SignInForm classes={classes} handleClick={handleClick}/>
   }  
 
   function ForgotPasswordRoute(){
-    return <ForgotPassword classes={classes}/>
+    return <ForgotPassword classes={classes} handleClick={handleClick}/>
   }  
 
   function RegisterRoute(){
-    return <Register classes={classes}/>
+    return <Register classes={classes} handleClick={handleClick}/>
   }  
 
   
+  
+
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.checked });
 
@@ -261,6 +279,19 @@ export default function SignInSide (props) {
     }
 
   };
+
+    const formView = () => {
+      if (view === 0) {
+        return SignInFormRoute();
+      }
+      else if (view === 1){
+        return ForgotPasswordRoute();
+      }
+      else if (view === 2){
+        return RegisterRoute();
+      }
+    } 
+
     return (
       
       <ThemeProvider theme={theme}>
@@ -282,13 +313,7 @@ export default function SignInSide (props) {
           labelPlacement="bottom"
         />
           </Grid>
-          <Router>
-       
-            <Route path="/" exact component={SignInFormRoute}/>
-            <Route path="/ForgotPassword"  component={ForgotPasswordRoute}/>
-            <Route path="/register"  component={RegisterRoute}/>
-         
-          </Router>
+          {formView()}
           </Grid>
           </Grid>
       </ThemeProvider>

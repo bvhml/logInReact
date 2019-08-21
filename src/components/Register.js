@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios'
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -155,7 +156,7 @@ export default class Register extends React.Component{
       
 
     render(){
-        const {classes} = this.props;
+        const {classes,handleClick} = this.props;
         
         
         return(
@@ -255,6 +256,13 @@ export default class Register extends React.Component{
                       >
                       Sign Up
                     </Button>
+                    <Grid container>
+                    <Grid item xs>
+                    <Link href="#" className={classes.Link} onClick={handleClick('signIn')}>
+                        Have already an account, Sign In
+                    </Link>
+                    </Grid>
+                    </Grid>
                 </form>
               </div>
         );

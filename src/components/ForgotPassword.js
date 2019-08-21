@@ -152,7 +152,7 @@ export default class ForgotPassword extends React.Component{
       
 
     render(){
-        const {classes} = this.props;
+        const {classes,handleClick} = this.props;
         
         
         return(
@@ -211,10 +211,17 @@ export default class ForgotPassword extends React.Component{
                       >
                       Restore Password
                     </Button>
-                    <Grid container item >          
-                        <Link href="#" variant="body2">
-                        {"Don't have an account? Sign Up"}
-                        </Link>
+                    <Grid container>
+                    <Grid item xs>
+                    <Link href="#" className={classes.Link} onClick={handleClick('signIn')}>
+                        Have already an account, Sign In
+                    </Link>
+                    </Grid>
+                    <Grid item>
+                      <Link href="#" variant="body2"  className={classes.Link} onClick={handleClick('register')}>
+                        Don't have an account? Sign Up
+                      </Link>
+                    </Grid>
                     </Grid>
                 </form>
               </div>
