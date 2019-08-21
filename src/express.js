@@ -6,7 +6,12 @@ import express from 'express';
 import models, { sequelize } from './models';
 import routes from './routes';
 
+
 const app = express();
+
+var bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const exjwt = require('express-jwt');
 // Application-Level Middleware
 
 app.use(cors());
@@ -15,12 +20,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(async (req, res, next) => {
+  const { email, password } = req.body;
+
   req.context = {
     models,
-    me: await models.User.findByLogin('rwieruch'),
+    me: await models.User.findByLogin(email||'',password||''),
   };
+
+  res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization');
   next();
 });
+
+
+const jwtMW = exjwt({
+  secret: 'meg the cat'
+  });
+
+
 
 // Routes
 
@@ -45,14 +61,19 @@ sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
 const createUsersWithMessages = async () => {
   await models.User.create(
     {
-      username: 'rwieruch',
-      password: 'rwieruch',
+      username: 'byrito95@gmail.com',
+      password: 'prueba',
+      nombre:'Roberto',
+      apellido:'Perez',
     },
   );
 
   await models.User.create(
     {
-      username: 'ddavids',
+      username: 'victorh-morales@gmail.com',
+      password: 'password',
+      nombre:'Alejandro',
+      apellido:'Morales',
     },
   );
   console.log("Creation done");

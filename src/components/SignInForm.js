@@ -19,6 +19,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import * as LinkRouter from "react-router-dom";
 import AuthHelperMethods from './AuthHelperMethods';
+import jwt from 'jwt-decode'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -76,37 +77,46 @@ export default class SignInForm extends React.Component{
       }
     }
     handleSubmit(event){
+     
       event.preventDefault();
+
+      
 
       const email = event.target.email.value;
       const password = event.target.password.value;
-      const validation = validatorArg.validate(this.state);
+
+      this.setState({
+        email:email,
+        password:password,
+      });
+
+
+
+      const validation = validatorArg.validate({email:email,password:password});
+
+    
+
       validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
 
       if (validation.isValid) {
         console.log("TODO BIEN");
-          this.setState({
-            email:email,
-            password:password,
-            showDialog:true
-        });
+          
 
-        this.Auth.login(this.state.email, this.state.password)
+        this.Auth.login(email, password)
           .then(res => {
             if (res === false) {
               this.setState({
                 messageDialog:"Usuario/Password no son correctos",
+                showDialog:true,
               });
               return alert("Usuario/Password no son correctos");
               
             }
-
-            this.props.history.replace("/");
+            
+            console.log(res);
+            //this.props.history.replace("/");
           })
           .catch(err => {
-            this.setState({
-              messageDialog:err,
-            });
             alert(err);
           });
 
