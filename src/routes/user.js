@@ -35,7 +35,8 @@ router.post('/login', async (req, res) => {
       
       if (user === null) {
         res.status(400).json({
-          sucess: false,
+          status:400,
+          success: false,
           token: null,
           message: 'Usuario/Password no son correctos',
           user:user
@@ -56,8 +57,9 @@ router.post('/login', async (req, res) => {
         }
         else {
           console.log("Usuario/Password no son correctos");
-          res.status(401).json({
-            sucess: false,
+          res.status(400).json({
+            status:400,
+            success: false,
             token: null,
             err: 'Usuario/Password no son correctos'
           });
@@ -87,14 +89,16 @@ router.post('/register', async (req, res) => {
     ).then((user) => {
       if (user === null) {
         res.status(400).json({
-          sucess: true,
+          status:400,
+          success: true,
           token: null,
           err: 'Ha ocurrido un error al insertar nuevo usuario'
         });
       }
       else{
         res.status(200).json({
-          sucess: true,
+          status:200,
+          success: true,
           token: null,
           msg: 'Creado con exito '
         });
@@ -105,7 +109,8 @@ router.post('/register', async (req, res) => {
     .catch(function(err) {
       // print the error details
       res.status(400).json({
-        sucess: false,
+        status:400,
+        success: false,
         token: null,
         err: 'El Correo ya esta en uso'
       });

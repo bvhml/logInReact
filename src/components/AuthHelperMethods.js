@@ -54,6 +54,7 @@ export default class AuthHelperMethods {
   isTokenExpired = token => {
     try {
       const decoded = decode(token);
+      console.log(decoded);
       if (decoded.exp < Date.now() / 1000) {
         // Checking if token is expired.
         return true;

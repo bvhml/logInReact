@@ -111,13 +111,24 @@ export default class SignInForm extends React.Component{
 
         this.Auth.login(email, password)
           .then(res => {
-            if (res === false) {
+            if (res.data.status === 400) {
               this.setState({
                 messageDialog:"Usuario/Password no son correctos",
                 showDialog:true,
               });
-              return alert("Usuario/Password no son correctos");
+              //return alert("Usuario/Password no son correctos");
               
+            }
+            else if (res.data.status === 200){
+              if (this.Auth.loggedIn()){
+                //this.props.history.replace('/');
+                console.log("Ya inicie sesion");
+                const {goToMe} = this.props;
+                goToMe();
+              }
+              else{
+                this.Auth.logout();
+              }
             }
             
             console.log(res);
