@@ -75,7 +75,7 @@ export default class SignInForm extends React.Component{
     Auth = new AuthHelperMethods();
     componentWillMount(){
       if (this.Auth.loggedIn()){
-        this.props.history.replace('/');
+        //this.props.history.replace('/');
       }
     }
     handleSubmit(event){
@@ -118,7 +118,11 @@ export default class SignInForm extends React.Component{
             //this.props.history.replace("/");
           })
           .catch(err => {
-            alert(err);
+            //alert(err);
+            this.setState({
+              messageDialog:"Usuario/Password no son correctos",
+              showDialog:true,
+            });
           });
 
       }

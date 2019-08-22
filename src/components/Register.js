@@ -99,7 +99,7 @@ export default class Register extends React.Component{
     Auth = new AuthHelperMethods();
     componentWillMount(){
       if (this.Auth.loggedIn()){
-        this.props.history.replace('/');
+        //this.props.history.replace('/');
       }
     }
 
@@ -120,6 +120,8 @@ export default class Register extends React.Component{
       const validation = validatorArg.validate({email: email,password: password,nombre: nombre,apellido: apellido});
 
       this.validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid,nombre:validation.nombre.isInvalid,apellido:validation.apellido.isInvalid}
+      
+     
 
       if (validation.isValid) {
         console.log("TODO BIEN");
@@ -128,19 +130,35 @@ export default class Register extends React.Component{
           .then(res => {
             if (res === false) {
               this.setState({
-                messageDialog:"Usuario/Password no son correctos",
+                messageDialog:"El correo ya esta en uso.",
                 showDialog:true,
               });
-              return alert("Usuario/Password no son correctos");
+              return alert("El correo ya esta en uso.");
               
             }
+            else{
+              this.setState({
+                messageDialog:"Creado con exito",
+                showDialog:true,
+              });
+            }
             
+            
+
             console.log(res);
             //this.props.history.replace("/");
           })
           .catch(err => {
-            alert(err);
+            this.setState({
+              messageDialog:"Correo ya esta en uso.",
+              showDialog:true,
+            });
+            //alert(err);
           });
+
+          
+
+
         
       }
       else{
