@@ -54,7 +54,7 @@ export default class AuthHelperMethods {
   isTokenExpired = token => {
     try {
       const decoded = decode(token);
-      console.log(decoded);
+      
       if (decoded.exp < Date.now() / 1000) {
         // Checking if token is expired.
         return true;
@@ -83,8 +83,7 @@ export default class AuthHelperMethods {
   getConfirm = () => {
     // Using jwt-decode npm package to decode the token
     let answer = decode(this.getToken());
-    console.log("Received answer!");
-    console.log(answer);
+    
     return answer;
   };
 

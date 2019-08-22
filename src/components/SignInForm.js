@@ -18,11 +18,13 @@ import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import * as LinkRouter from "react-router-dom";
+import {BrowserRouter as Router,Route,Redirect,withRouter} from "react-router-dom";
 import AuthHelperMethods from './AuthHelperMethods';
 import jwt from 'jwt-decode'
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Me from './Me'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -84,12 +86,12 @@ export default function SignInForm (props) {
       if (Auth.loggedIn()){
         //this.props.history.replace('/');
         console.log("Ya inicie sesion");
-        
       }
       else{
+        console.log("No inicie sesion");
         Auth.logout();
       }
-    });
+    }, []);
     
     function handleSubmit(event){
      
@@ -99,11 +101,7 @@ export default function SignInForm (props) {
       const email = event.target.email.value;
       const password = event.target.password.value;
 
-      setState(state => ({
-        ...state,
-        email:email,
-        password:password,
-      }));
+      
 
 
 
@@ -129,20 +127,18 @@ export default function SignInForm (props) {
               
             }
             else if (res.data.status === 200){
-              if (Auth.loggedIn()){
+              
                 //this.props.history.replace('/');
-                console.log("Ya inicie sesion");
-              }
-              else{
-                Auth.logout();
-              }
+                console.log("Ya inicie sesion Sign In");
+                setState(state => ({
+                  ...state,
+                  email:email,
+                  password:password,
+                }));
+             
             }
-            
-            //console.log(res);
-            //this.props.history.replace("/");
           })
           .catch(err => {
-            //alert(err);
             setState(state => ({
               ...state,
               messageDialog:"Usuario/Password no son correctos",
@@ -156,6 +152,11 @@ export default function SignInForm (props) {
         
       }
       
+      setState(state => ({
+        ...state,
+        email:email,
+        password:password,
+      }));
       
       return;
 
@@ -174,7 +175,12 @@ export default function SignInForm (props) {
    
         const {classes,handleClick} = props;
         
-        
+        let { from } = { from: { pathname: "/Me" } };
+    
+
+        if (Auth.loggedIn()) {
+          return <Redirect to={from}/>;
+        }
         return(
           <div>
           <Grid container component="main" className={classes.root} fixed = {'true'}>
@@ -242,14 +248,15 @@ export default function SignInForm (props) {
                     >
                       <DialogTitle id="alert-dialog-title">{"Attention!"}</DialogTitle>
                       <DialogContent className={classes.dialogContent}>
+                      <Avatar  className={classes.bigAvatar} >
                       <Info className={classes.icon} />
-                        <DialogContentText id="alert-dialog-description" >
-                          
+                      </Avatar>
+                        <DialogContentText id="alert-dialog-description" style={{color:'white'}}>
                           {state.messageDialog}
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={handleClose} color="primary" autoFocus>
+                        <Button onClick={handleClose} autoFocus>
                           Dismiss
                         </Button>
                       </DialogActions>
@@ -265,14 +272,15 @@ export default function SignInForm (props) {
                     </Button>
                     <Grid container>
                     <Grid item xs>
+                      
                     <Link href="#" className={classes.Link} onClick={handleClick('forgotPassword')}>
                         Forgot password?
                     </Link>
                     </Grid>
                     <Grid item>
-                      <Link href="#" variant="body2"  className={classes.Link} onClick={handleClick('register')}>
-                        Don't have an account? Sign Up
-                      </Link>
+                    <LinkRouter.Link to="/register" component={Link} className={classes.Link} style={{ textDecoration: 'none' }}>
+                      Don't have an account? Sign Up
+                    </LinkRouter.Link>
                     </Grid>
                     </Grid>
                 </form>

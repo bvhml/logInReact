@@ -21,6 +21,7 @@ import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import * as LinkRouter from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -114,7 +115,7 @@ export default function Register (props){
       else{
         Auth.logout();
       }
-    });
+    },[]);
 
     function handleSubmit(event){
 
@@ -209,7 +210,7 @@ export default function Register (props){
           <div>
           <Grid container component="main" className={classes.root} fixed = {'true'}>
           <CssBaseline />
-          <Grid item xs={false} sm={5} md={7} component={Paper} className={classes.image} elevation={7} square>PAPEL</Grid>
+          <Grid item xs={false} sm={5} md={7} component={Paper} className={classes.image} elevation={7} square></Grid>
             <Grid item xs={12} sm={7} md={5} component={Paper} elevation={7} square >
               <Grid container item justify="flex-end" direction="row">
                 <FormControlLabel
@@ -299,15 +300,17 @@ export default function Register (props){
                       aria-describedby="alert-dialog-description"
                     >
                       <DialogTitle id="alert-dialog-title">{"Attention!"}</DialogTitle>
-                      <DialogContent className={classes.dialogContent}>
+                      <DialogContent className={classes.dialogContent} >
+                      <Avatar  className={classes.bigAvatar} >
                       <Info className={classes.icon} />
-                        <DialogContentText id="alert-dialog-description" >
+                      </Avatar>
+                        <DialogContentText id="alert-dialog-description" style={{color:'white'}}>
                           
                           {state.messageDialog}
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={handleClose} color="primary" autoFocus>
+                        <Button onClick={handleClose} autoFocus>
                           Dismiss
                         </Button>
                       </DialogActions>
@@ -322,10 +325,10 @@ export default function Register (props){
                       Sign Up
                     </Button>
                     <Grid container>
-                    <Grid item xs>
-                    <Link href="#" className={classes.Link} onClick={handleClick('signIn')}>
-                        Have already an account, Sign In
-                    </Link>
+                    <Grid item lg>
+                    <LinkRouter.Link to="/" component={Link} className={classes.Link} style={{ textDecoration: 'none' }}>
+                      Already have an account? Sign In
+                    </LinkRouter.Link>
                     </Grid>
                     </Grid>
                 </form>

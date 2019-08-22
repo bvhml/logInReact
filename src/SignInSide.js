@@ -7,13 +7,14 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import blue from '@material-ui/core/colors/blue';
 import deepOrange from '@material-ui/core/colors/deepOrange';
-import { BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router,Route,Link,Redirect,withRouter} from "react-router-dom";
 import SignInForm from './components/SignInForm'
 import ForgotPassword from './components/ForgotPassword'
 import Me from './components/Me'
 import Register from './components/Register'
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import AuthHelperMethods from './components/AuthHelperMethods';
 
 let theme = createMuiTheme({});
 let themeName = 'Dark';
@@ -42,6 +43,11 @@ let useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
+  bigAvatar: {
+    margin: 10,
+    width: 100,
+    height: 100,
+  },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
@@ -64,6 +70,7 @@ let useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    width:400,
   },
   Link: {
     color:blue[400],
@@ -76,10 +83,13 @@ theme = createMuiTheme({
     // Style sheet name ⚛️
     MuiButton: {
       root: {
-        backgroundColor:'#303030',
+        backgroundColor:blue[400],
         border: 0,
         color: 'white',
-        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        "&:hover": { // increase the specificity for the pseudo class
+          color: "white",
+          backgroundColor:blue[800],
+        }
       },
     },
     MuiPaper:{
@@ -153,7 +163,8 @@ theme = createMuiTheme({
 export default function SignInSide (props) {
   
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  let Auth = new AuthHelperMethods();
+  const [tema, setTema] = React.useState({
     checkedA: false,
     checkedB: true,
   });
@@ -180,10 +191,8 @@ export default function SignInSide (props) {
 
   }
 
-  function goToMe(){ setView(3)};
-
   function SignInFormRoute(){
-    return <SignInForm handleChange={handleChange} classes={classes} handleClick={handleClick}/>
+    return <SignInForm handleChange={handleChange} classes={classes} handleClick={handleClick} PrivateRoute={PrivateRoute}/>
   }  
 
   function ForgotPasswordRoute(){
@@ -194,15 +203,32 @@ export default function SignInSide (props) {
     return <Register handleChange={handleChange} classes={classes} handleClick={handleClick}/>
   }  
 
-  function MeRoute(){
-    return <Me classes={classes} handleClick={handleClick} goToMe={() => goToMe}/>
+  function ProtectedRoute(){
+    return <Me handleChange={handleChange} classes={classes} handleClick={handleClick}/>
   }  
 
   
-  
+  function PrivateRoute({ component: Component, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={props =>
+          Auth.loggedIn() ? (
+            <Component {...props} />
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/"
+              }}
+            />
+          )
+        }
+      />
+    );
+  }
 
   const handleChange = name => event => {
-    setState({ ...state, [name]: event.target.checked });
+    setTema({ ...tema, [name]: event.target.checked });
 
     if (event.target.checked) {
       themeName = 'Dark';
@@ -288,36 +314,16 @@ export default function SignInSide (props) {
       });
     }
 
-  };
-
-    const formView = () => {
-      if (view === 0) {
-        return SignInFormRoute();
-      }
-      else if (view === 1){
-        return ForgotPasswordRoute();
-      }
-      else if (view === 2){
-        return RegisterRoute();
-      }
-      else if (view === 3){
-        return MeRoute();
-      }
-    } 
+    };
 
     return (
       
       <ThemeProvider theme={theme}>
-
-      <Router>
-
-      <Route path="/" exact component={SignInFormRoute}/>
-      <Route path="/register" exact component={RegisterRoute}/>
-
-
-      </Router>
-          
-          
+        <Router>
+          <Route path="/" exact component={SignInFormRoute}/>
+          <Route path="/register" exact component={RegisterRoute}/>
+          <PrivateRoute path="/Me" component={ProtectedRoute} />
+        </Router>
       </ThemeProvider>
     );
 }

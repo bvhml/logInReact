@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -18,8 +18,13 @@ import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import * as LinkRouter from "react-router-dom";
+import {BrowserRouter as Router,Route,Redirect,withRouter} from "react-router-dom";
 import AuthHelperMethods from './AuthHelperMethods';
 import jwt from 'jwt-decode'
+import Paper from '@material-ui/core/Paper';
+import Switch from '@material-ui/core/Switch';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -48,38 +53,47 @@ export const validatorArg = new FormValidator([
 
 
 
-export default class Me extends React.Component{
-    constructor(props){
-        super(props);
-        this.state ={
-            email:'',
-            password:'',
-            messageDialog:'',
-            showDialog:false,
-        };
+export default function Me (props) {
 
-        this.handleClose = this.handleClose.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.emailInput = React.createRef();
-        
-    }
+  let themeName = props.themeName;
 
-    validationResponse =  {};
+  const handleChange = props.handleChange;
 
-    focusInput(component) {
+      const [state,setState] = useState({
+        email:'',
+        password:'',
+        messageDialog:'',
+        showDialog:false,
+      });
+ 
+    let emailInput = React.createRef();
+
+    let validationResponse =  {};
+
+    function focusInput(component) {
       if (component) {
           React.findDOMNode(component).focus(); 
       }
     }
     
-    Auth = new AuthHelperMethods();
-    componentWillMount(){
-      if (this.Auth.loggedIn()){
+    let Auth = new AuthHelperMethods();
+    let decoded = {};
+
+    useEffect(() =>{
+      if (Auth.loggedIn()){
         //this.props.history.replace('/');
-        
+        console.log("Ya inicie sesion");
+
+        //decoded = Auth.getConfirm();
+        //console.log(decoded);
       }
-    }
-    handleSubmit(event){
+      else{
+        console.log("No inicie sesion");
+        Auth.logout();
+      }
+    }, []);
+    
+    function handleSubmit(event){
      
       event.preventDefault();
 
@@ -87,10 +101,11 @@ export default class Me extends React.Component{
       const email = event.target.email.value;
       const password = event.target.password.value;
 
-      this.setState({
+      setState(state => ({
+        ...state,
         email:email,
         password:password,
-      });
+      }));
 
 
 
@@ -98,42 +113,49 @@ export default class Me extends React.Component{
 
     
 
-      this.validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
+      validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
 
       if (validation.isValid) {
         console.log("TODO BIEN");
           
 
-        this.Auth.login(email, password)
+        Auth.login(email, password)
           .then(res => {
-            if (res === false) {
-              this.setState({
+            if (res.data.status === 400) {
+              setState(state => ({
+                ...state,
                 messageDialog:"Usuario/Password no son correctos",
                 showDialog:true,
-              });
-              return alert("Usuario/Password no son correctos");
+              }));
+              //return alert("Usuario/Password no son correctos");
               
             }
+            else if (res.data.status === 200){
+              if (Auth.loggedIn()){
+                //this.props.history.replace('/');
+                console.log("Ya inicie sesion");
+              }
+              else{
+                Auth.logout();
+              }
+            }
             
-            console.log(res);
+            //console.log(res);
             //this.props.history.replace("/");
           })
           .catch(err => {
             //alert(err);
-            this.setState({
+            setState(state => ({
+              ...state,
               messageDialog:"Usuario/Password no son correctos",
               showDialog:true,
-            });
+            }));
           });
 
       }
       else{
         //if is Invalid
-        if (this.validationResponse.email) { 
-        }
-        else if (this.validationResponse.password) {
-          
-        }
+        
       }
       
       
@@ -141,113 +163,76 @@ export default class Me extends React.Component{
 
       }
     
-      componentDidUpdate(){
 
-        
-        if (this.validationResponse.email) {
-          //console.log(this.emailInput.current);
-           
-        }
-        else if (this.validationResponse.password) {
-          
-        }
+      function handleClose() { 
+        setState(state => ({
+          ...state,
+          showDialog:false
+        }));
       }
 
-      handleClose() { 
-        this.setState({
+      function logOut(){
+        setState(state => ({
+          ...state,
           showDialog:false
-        });
+        }));
+        Auth.logout();
       }
 
       
 
-    render(){
-        const {classes,handleClick} = this.props;
-        
+
+        const {classes,handleClick} = props;
+        let { from } = { from: { pathname: "/" } };
+        if (!Auth.loggedIn()) {
+          return <Redirect to={from}/>;
+        }
         
         return(
-            <div className={classes.paper} spacing={5}>
+          <div>
+          <Grid container component="main" className={classes.root} fixed = {'true'}>
+          <CssBaseline />
+          <Grid item xs={false} sm={false} md={false} component={Paper} className={classes.image} elevation={7} square></Grid>
+            <Grid item xs={12} sm={12} md={12} component={Paper} elevation={7} square >
+              <Grid container item justify="flex-end" direction="row">
+                <FormControlLabel
+                value="top"
+                control={<Switch
+                  checked={state.checkedB}
+                  onChange={handleChange('checkedB')}
+                  value="checkedB"
+                  color="primary"
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                />}
+                label={themeName}
+                labelPlacement="bottom"
+              />
+              </Grid>
+              <div className={classes.paper} spacing={5}>
               <Avatar className={classes.avatar}>
                   <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                  Already Signed In
+                  WELCOME TO HOME PAGE
               </Typography>
-              <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
-                    <TextField
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    error={this.validationResponse.email}
-                    inputRef={this.emailInput}
-                    
-                    />
-                    <TextField
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    error={this.validationResponse.password}
-                    />
-                    <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                    />
-                    <Dialog
-                      open={this.state.showDialog}
-                      onClose={this.handleClose}
-                      TransitionComponent={Transition}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                    >
-                      <DialogTitle id="alert-dialog-title">{"Attention!"}</DialogTitle>
-                      <DialogContent className={classes.dialogContent}>
-                      <Info className={classes.icon} />
-                        <DialogContentText id="alert-dialog-description" >
-                          
-                          {this.state.messageDialog}
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={this.handleClose} color="primary" autoFocus>
-                          Dismiss
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                    <Button
-                      type="submit"
+              <Grid container item xs justify="flex-end" direction="row">
+              <Button
+                     
                       fullWidth
                       variant="contained"
                       color="primary"
                       className={classes.submit}
+                      onClick={logOut}
                       >
-                      Sign In
+                      Log Out
                     </Button>
-                    <Grid container>
-                    <Grid item xs>
-                    <Link href="#" className={classes.Link} onClick={handleClick('forgotPassword')}>
-                        Forgot password?
-                    </Link>
-                    </Grid>
-                    <Grid item>
-                      <Link href="#" variant="body2"  className={classes.Link} onClick={handleClick('register')}>
-                        Don't have an account? Sign Up
-                      </Link>
-                    </Grid>
-                    </Grid>
-                </form>
+              </Grid>
               </div>
+              
+            </Grid>
+            </Grid>
+            </div>
+            
         );
-    }
+    
 }
