@@ -38,7 +38,7 @@ export default class AuthHelperMethods {
           email: username,
           password: password,
           nombre:nombre,
-          apellido,apellido,
+          apellido:apellido,
         })
         .then(this._checkStatus)
         .then(response => response);
@@ -83,6 +83,7 @@ export default class AuthHelperMethods {
     // Using jwt-decode npm package to decode the token
     let answer = decode(this.getToken());
     console.log("Received answer!");
+    console.log(answer);
     return answer;
   };
 

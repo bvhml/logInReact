@@ -10,6 +10,7 @@ import deepOrange from '@material-ui/core/colors/deepOrange';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import SignInForm from './components/SignInForm'
 import ForgotPassword from './components/ForgotPassword'
+import Me from './components/Me'
 import Register from './components/Register'
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -173,11 +174,16 @@ export default function SignInSide (props) {
     else if(name === "register"){
       setView(2);
     }
+    else if (name === "me"){
+      setView(3);
+    }
 
   }
 
+  function goToMe(){ setView(3)};
+
   function SignInFormRoute(){
-    return <SignInForm classes={classes} handleClick={handleClick}/>
+    return <SignInForm classes={classes} handleClick={handleClick} goToMe={goToMe}/>
   }  
 
   function ForgotPasswordRoute(){
@@ -186,6 +192,10 @@ export default function SignInSide (props) {
 
   function RegisterRoute(){
     return <Register classes={classes} handleClick={handleClick}/>
+  }  
+
+  function MeRoute(){
+    return <Me classes={classes} handleClick={handleClick} goToMe={() => goToMe}/>
   }  
 
   
@@ -289,6 +299,9 @@ export default function SignInSide (props) {
       }
       else if (view === 2){
         return RegisterRoute();
+      }
+      else if (view === 3){
+        return MeRoute();
       }
     } 
 

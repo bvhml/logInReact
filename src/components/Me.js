@@ -48,7 +48,7 @@ export const validatorArg = new FormValidator([
 
 
 
-export default class SignInForm extends React.Component{
+export default class Me extends React.Component{
     constructor(props){
         super(props);
         this.state ={
@@ -76,18 +76,6 @@ export default class SignInForm extends React.Component{
     componentWillMount(){
       if (this.Auth.loggedIn()){
         //this.props.history.replace('/');
-        console.log("Ya inicie sesion");
-        const {goToMe} = this.props;
-        
-
-        if (this.Auth.isTokenExpired(this.Auth.getToken())) {
-          this.Auth.logout();
-        }
-        else{
-          goToMe();
-          this.Auth.getConfirm();
-        }
-        
         
       }
     }
@@ -183,7 +171,7 @@ export default class SignInForm extends React.Component{
                   <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                  Sign in
+                  Already Signed In
               </Typography>
               <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
                     <TextField
