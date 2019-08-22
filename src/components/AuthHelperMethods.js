@@ -47,24 +47,34 @@ export default class AuthHelperMethods {
 
       validateMe = () => {
         // Get a token from api server using the fetch api
-        var config = {};
-        if (this.loggedIn()) {
-            config = {
-                headers: { Authorization: "bearer " + this.getToken() }
-              };
+        console.log(this.getToken());
+        if (this.getToken() !== 'undefined') {
+          const instance = axios.create({
+            baseURL: 'http://localhost',
+            timeout: 1000,
+            headers: {'Authorization': 'Bearer '+this.getToken() }
+          });
+          instance.get('/me')
+          .then(response => {
+              return response;
+          })
+
+          return this.getConfirm();
         }
-    
-        return axios.get('http://localhost/me', {
-            jwt:this.getToken(),
-          },config)
-          .then(this._checkStatus)
-          .then(response => response);
-    
+        else{
+          this.logout();
+          return {}
         }
+      }
+        
 
   loggedIn = () => {
     // Checks if there is a saved token and it's still valid
     const token = this.getToken(); // Getting token from localstorage
+
+    if (token === 'undefined') {
+      this.logout();
+    }
     return !!token && !this.isTokenExpired(token); // handwaiving here
   };
 
@@ -129,7 +139,7 @@ export default class AuthHelperMethods {
     if (response.status >= 200 && response.status < 300) {
       // Success status lies between 200 to 300
 
-      if (response.data.jwt !== null) {
+      if ((response.data.jwt !== null)|| (response.data.jwt !== undefined)) {
         this.setToken(response.data.jwt);
       }
       return response;

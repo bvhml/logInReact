@@ -165,7 +165,7 @@ export default function SignInSide (props) {
   });
 
   const handleChange = name => event => {
-    setTema({ ...tema, [name]: event.target.checked });
+    
 
     if (event.target.checked) {
       themeName = 'Dark';
@@ -251,6 +251,8 @@ export default function SignInSide (props) {
       });
     }
 
+    setTema(tema => ({ ...tema, [name]: event.target.checked }));
+    return;
     };
  
 

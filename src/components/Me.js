@@ -12,6 +12,13 @@ import AuthHelperMethods from './AuthHelperMethods';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import InboxIcon from '@material-ui/icons/Inbox';
+import DraftsIcon from '@material-ui/icons/Drafts';
 
 
 
@@ -37,7 +44,7 @@ export const validatorArg = new FormValidator([
 ]);
 
 
-
+let information = {};
 export default function Me (props) {
 
   let themeName = props.themeName;
@@ -56,13 +63,14 @@ export default function Me (props) {
     
     let Auth = new AuthHelperMethods();
     
-
+    
     useEffect(() =>{
       let Authenticate = new AuthHelperMethods();
       if (Authenticate.loggedIn()){
         //this.props.history.replace('/');
-        console.log("Ya inicie sesion ME");
-
+        //console.log("Ya inicie sesion ME");
+        //information = Auth.validateMe();
+        //console.log(information.username);
         //Authenticate.validateMe();
         //decoded = Auth.getConfirm();
         //console.log(decoded);
@@ -82,13 +90,19 @@ export default function Me (props) {
         Auth.logout();
       }
 
-      
+      function ListItemLink(props) {
+        return <ListItem button component="a" {...props} />;
+      }
 
+      
 
         const {classes} = props;
         let { from } = { from: { pathname: "/" } };
         if (!Auth.loggedIn()) {
           return <Redirect to={from}/>;
+        }
+        else{
+          information = Auth.validateMe();
         }
         
         return(
@@ -116,19 +130,32 @@ export default function Me (props) {
                   <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                  WELCOME TO HOME PAGE
+                  WELCOME TO HOME PAGE 
               </Typography>
-              <Grid container item xs justify="flex-end" direction="row">
+              <Grid container item justify="center" component="main"  fixed = {'true'}>
+            <Divider />
+            <List component="nav" aria-label="secondary mailbox folders">
+              <ListItem button>
+                <ListItemText primary={`Username: ${information.username}` || 'USERNAME'} />
+              </ListItem>
+              <ListItemLink href="#simple-list">
+                <ListItemText primary={`Nombre: ${information.nombre}` || 'NOMBRE'}  />
+              </ListItemLink>
+              <ListItemLink href="#simple-list">
+                <ListItemText primary={`Apellido: ${information.apellido}` || 'APELLIDO'}  />
+              </ListItemLink>
+            </List>
+              </Grid>
+              
+              <Grid container item xs justify="center"  direction="row" >
               <Button
-                     
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                      onClick={logOut}
-                      >
-                      Log Out
-                    </Button>
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={logOut}
+                >
+                Log Out
+              </Button>
               </Grid>
               </div>
               
