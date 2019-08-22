@@ -53,8 +53,8 @@ sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
     createUsersWithMessages();
   }
 
-  app.listen(process.env.PORT, () =>
-    console.log(`Listening on port ${process.env.PORT}!`),
+  app.listen(process.env.EXPRESS_PORT, () =>
+    console.log(`Listening on port ${process.env.EXPRESS_PORT}!`),
   );
 });
 
