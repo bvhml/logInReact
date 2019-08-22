@@ -21,7 +21,7 @@ router.get('/:userId', async (req, res) => {
   return res.send(user);
 });
 
-router.post('/', async (req, res) => {
+router.post('/login', async (req, res) => {
   const {email,password} = req.body;
   const saltRounds = 10;
   
@@ -48,18 +48,18 @@ router.post('/', async (req, res) => {
           console.log("Valid!");
           let token = jwt.sign({ id:user.id,nombre:user.nombre,apellido:user.apellido,username: user.username }, 'meg the cat', { expiresIn: 3600 }); // Signing the token
           res.json({
-            sucess: true,
-            err: null,
-            token
+            status:200,
+            success: true,
+            message:"Login Correcto",
+            jwt:token
           });
         }
         else {
-          console.log("Entered Password and Hash do not match!");
+          console.log("Usuario/Password no son correctos");
           res.status(401).json({
             sucess: false,
             token: null,
-            err: 'Entered Password and Hash do not match!',
-            user:user
+            err: 'Usuario/Password no son correctos'
           });
         }
       });

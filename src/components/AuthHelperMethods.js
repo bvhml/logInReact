@@ -16,10 +16,10 @@ export default class AuthHelperMethods {
           };
     }
 
-    return axios.post('http://localhost/users/', {
+    return axios.post('http://localhost/users/login', {
         email: username,
         password: password
-      })
+      },config)
       .then(this._checkStatus)
       .then(response => response);
 
@@ -112,8 +112,8 @@ export default class AuthHelperMethods {
     if (response.status >= 200 && response.status < 300) {
       // Success status lies between 200 to 300
 
-      if (response.data.token !== null) {
-        this.setToken(response.data.token);
+      if (response.data.jwt !== null) {
+        this.setToken(response.data.jwt);
       }
       return response;
     } else {

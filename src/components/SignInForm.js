@@ -78,17 +78,10 @@ export default class SignInForm extends React.Component{
         //this.props.history.replace('/');
         console.log("Ya inicie sesion");
         const {goToMe} = this.props;
-        
-
-        if (this.Auth.isTokenExpired(this.Auth.getToken())) {
-          this.Auth.logout();
-        }
-        else{
-          goToMe();
-          this.Auth.getConfirm();
-        }
-        
-        
+        goToMe();
+      }
+      else{
+        this.Auth.logout();
       }
     }
     handleSubmit(event){
