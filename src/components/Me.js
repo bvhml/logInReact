@@ -14,11 +14,8 @@ import Switch from '@material-ui/core/Switch';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 
 
 
@@ -48,7 +45,7 @@ let information = {};
 export default function Me (props) {
 
   let themeName = props.themeName;
-
+  let checkedB = props.checkedB;
   const handleChange = props.handleChange;
 
       const [state,setState] = useState({
@@ -83,10 +80,10 @@ export default function Me (props) {
     
 
       function logOut(){
-        setState(state => ({
+        setState({
           ...state,
           showDialog:false
-        }));
+        });
         Auth.logout();
       }
 
@@ -115,7 +112,7 @@ export default function Me (props) {
                 <FormControlLabel
                 value="top"
                 control={<Switch
-                  checked={state.checkedB}
+                  checked={checkedB}
                   onChange={handleChange('checkedB')}
                   value="checkedB"
                   color="primary"

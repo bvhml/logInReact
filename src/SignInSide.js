@@ -159,6 +159,7 @@ export default function SignInSide (props) {
   
   const classes = useStyles();
   let Auth = new AuthHelperMethods();
+
   const [tema, setTema] = React.useState({
     checkedA: false,
     checkedB: true,
@@ -166,7 +167,7 @@ export default function SignInSide (props) {
 
   const handleChange = name => event => {
     
-
+    setTema({ ...tema, [name]: event.target.checked});
     if (event.target.checked) {
       themeName = 'Dark';
       theme = createMuiTheme({
@@ -251,7 +252,7 @@ export default function SignInSide (props) {
       });
     }
 
-    setTema(tema => ({ ...tema, [name]: event.target.checked }));
+    
     return;
     };
  
@@ -260,7 +261,7 @@ export default function SignInSide (props) {
 
 
   function SignInFormRoute(){
-    return <SignInForm handleChange={handleChange} classes={classes} themeName={themeName}/>
+    return <SignInForm handleChange={handleChange} classes={classes} themeName={themeName} checkedB={tema.checkedB}/>
   }  
 
   // eslint-disable-next-line
@@ -269,11 +270,11 @@ export default function SignInSide (props) {
   }  
 
   function RegisterRoute(){
-    return <Register handleChange={handleChange} classes={classes} themeName={themeName}/>
+    return <Register handleChange={handleChange} classes={classes} themeName={themeName} checkedB={tema.checkedB}/>
   }  
 
   function ProtectedRoute(){
-    return <Me handleChange={handleChange} classes={classes} themeName={themeName}/>
+    return <Me handleChange={handleChange} classes={classes} themeName={themeName} checkedB={tema.checkedB}/>
   }  
 
   

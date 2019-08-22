@@ -76,6 +76,7 @@ let validationResponse =  {};
 export default function Register (props){
 
         let themeName = props.themeName;
+        let checkedB = props.checkedB;
         const handleChange = props.handleChange;
 
         const [state,setState] = useState({
@@ -209,7 +210,7 @@ export default function Register (props){
                 <FormControlLabel
                 value="top"
                 control={<Switch
-                  checked={state.checkedB}
+                  checked={checkedB}
                   onChange={handleChange('checkedB')}
                   value="checkedB"
                   color="primary"

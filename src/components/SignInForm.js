@@ -55,7 +55,7 @@ let validationResponse =  {};
 export default function SignInForm (props) {
 
   let themeName = props.themeName;
-
+  let checkedB = props.checkedB;
   
 
       const [state,setState] = useState({
@@ -181,7 +181,7 @@ export default function SignInForm (props) {
                 <FormControlLabel
                 value="top"
                 control={<Switch
-                  checked={state.checkedB}
+                  checked={checkedB}
                   onChange={handleChange('checkedB')}
                   value="checkedB"
                   color="primary"
