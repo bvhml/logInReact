@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -17,6 +17,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Help from '@material-ui/icons/Help';
 import AuthHelperMethods from './AuthHelperMethods';
+import Paper from '@material-ui/core/Paper';
+import Switch from '@material-ui/core/Switch';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -70,89 +74,102 @@ export const validatorArg = new FormValidator([
 
 
 
-export default class Register extends React.Component{
-    constructor(props){
-        super(props);
-        this.state ={
-            email:'',
-            password:'',
-            nombre:'',
-            apellido:'',
-            messageDialog:'',
-            showDialog:false,
-        };
+export default function Register (props){
 
+        let themeName = props.themeName;
+        const handleChange = props.handleChange;
+
+        const [state,setState] = useState({
+          email:'',
+          password:'',
+          messageDialog:'',
+          showDialog:false,
+        });
+
+        /*
         this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.emailInput = React.createRef();
+        */
+
+        let emailInput = React.createRef();
         
-    }
+    
 
-    validationResponse =  {};
+    let validationResponse =  {};
 
-    focusInput(component) {
+    function focusInput(component) {
       if (component) {
           React.findDOMNode(component).focus(); 
       }
     }
 
-    Auth = new AuthHelperMethods();
-    componentWillMount(){
-      if (this.Auth.loggedIn()){
+    let Auth = new AuthHelperMethods();
+    
+    useEffect(() =>{
+      if (Auth.loggedIn()){
         //this.props.history.replace('/');
+        console.log("Ya inicie sesion");
+       
       }
-    }
+      else{
+        Auth.logout();
+      }
+    });
 
-    handleSubmit(event){
+    function handleSubmit(event){
 
         const email = event.target.email.value;
         const password = event.target.password.value;
         const nombre = event.target.nombre.value;
         const apellido = event.target.apellido.value;
 
-        this.setState({
+        setState(state => ({
+          ...state,
           email:email,
           password:password,
           nombre:nombre,
           apellido:apellido,
-        });
+        }));
 
       const validation = validatorArg.validate({email: email,password: password,nombre: nombre,apellido: apellido});
 
-      this.validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid,nombre:validation.nombre.isInvalid,apellido:validation.apellido.isInvalid}
+      validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid,nombre:validation.nombre.isInvalid,apellido:validation.apellido.isInvalid}
       
      
 
       if (validation.isValid) {
         console.log("TODO BIEN");
           
-        this.Auth.signUp(email, password,nombre,apellido)
+        Auth.signUp(email, password,nombre,apellido)
           .then(res => {
             if (res === false) {
-              this.setState({
+              setState(state => ({
+                ...state,
                 messageDialog:"El correo ya esta en uso.",
                 showDialog:true,
-              });
+              }));
               return alert("El correo ya esta en uso.");
               
             }
             else{
-              this.setState({
+              setState(state => ({
+                ...state,
                 messageDialog:"Creado con exito",
                 showDialog:true,
-              });
+              }));
             }
             
             
 
             console.log(res);
-            //this.props.history.replace("/");
+            //props.history.replace("/");
           })
           .catch(err => {
-            this.setState({
+            setState(state => ({
+              ...state,
               messageDialog:"Correo ya esta en uso.",
               showDialog:true,
-            });
+            }));
             //alert(err);
           });
 
@@ -163,9 +180,9 @@ export default class Register extends React.Component{
       }
       else{
         //if is Invalid
-        if (this.validationResponse.email) { 
+        if (validationResponse.email) { 
         }
-        else if (this.validationResponse.password) {
+        else if (validationResponse.password) {
           
         }
       }
@@ -176,32 +193,39 @@ export default class Register extends React.Component{
 
       }
     
-      componentDidUpdate(){
 
-        
-        if (this.validationResponse.email) {
-          //console.log(this.emailInput.current);
-           
-        }
-        else if (this.validationResponse.password) {
-          
-        }
-      }
-
-      handleClose() { 
-        this.setState({
+      function handleClose() { 
+        setState(state => ({
+          ...state,
           showDialog:false
-        });
+        }));
       }
 
       
-
-    render(){
-        const {classes,handleClick} = this.props;
+        const {classes,handleClick} = props;
         
         
         return(
-            <div className={classes.paper} spacing={1}>
+          <div>
+          <Grid container component="main" className={classes.root} fixed = {'true'}>
+          <CssBaseline />
+          <Grid item xs={false} sm={5} md={7} component={Paper} className={classes.image} elevation={7} square>PAPEL</Grid>
+            <Grid item xs={12} sm={7} md={5} component={Paper} elevation={7} square >
+              <Grid container item justify="flex-end" direction="row">
+                <FormControlLabel
+                value="top"
+                control={<Switch
+                  checked={state.checkedB}
+                  onChange={handleChange('checkedB')}
+                  value="checkedB"
+                  color="primary"
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                />}
+                label={themeName}
+                labelPlacement="bottom"
+              />
+              </Grid>
+              <div className={classes.paper} spacing={1}>
               <Avatar className={classes.avatar}>
                   <Help/>
               </Avatar>
@@ -210,7 +234,7 @@ export default class Register extends React.Component{
               </Typography>
              
             
-              <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
+              <form className={classes.form} onSubmit={handleSubmit} noValidate>
                     <Grid container item spacing={1}>
                         <Grid item md xs>
                             <TextField
@@ -223,8 +247,8 @@ export default class Register extends React.Component{
                             name="nombre"
                             autoComplete="Nombres"
                             autoFocus
-                            error={this.validationResponse.nombre}
-                            inputRef={this.emailInput}
+                            error={validationResponse.nombre}
+                            inputRef={emailInput}
                             />
                         </Grid>
                         <Grid item md xs>
@@ -237,8 +261,8 @@ export default class Register extends React.Component{
                             label="Apellidos"
                             name="apellido"
                             autoComplete="Apellidos"
-                            error={this.validationResponse.apellido}
-                            inputRef={this.emailInput}
+                            error={validationResponse.apellido}
+                            inputRef={emailInput}
                             />
                         </Grid>
                     </Grid>
@@ -252,8 +276,8 @@ export default class Register extends React.Component{
                     label="Email Address"
                     name="email"
                     autoComplete="email"
-                    error={this.validationResponse.email}
-                    inputRef={this.emailInput}
+                    error={validationResponse.email}
+                    inputRef={emailInput}
                     />
                     <TextField
                     variant="outlined"
@@ -265,11 +289,11 @@ export default class Register extends React.Component{
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    error={this.validationResponse.password}
+                    error={validationResponse.password}
                     />
                     <Dialog
-                      open={this.state.showDialog}
-                      onClose={this.handleClose}
+                      open={state.showDialog}
+                      onClose={handleClose}
                       TransitionComponent={Transition}
                       aria-labelledby="alert-dialog-title"
                       aria-describedby="alert-dialog-description"
@@ -279,11 +303,11 @@ export default class Register extends React.Component{
                       <Info className={classes.icon} />
                         <DialogContentText id="alert-dialog-description" >
                           
-                          {this.state.messageDialog}
+                          {state.messageDialog}
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={this.handleClose} color="primary" autoFocus>
+                        <Button onClick={handleClose} color="primary" autoFocus>
                           Dismiss
                         </Button>
                       </DialogActions>
@@ -306,6 +330,11 @@ export default class Register extends React.Component{
                     </Grid>
                 </form>
               </div>
+            </Grid>
+            </Grid>
+            </div>
+
+            
         );
-    }
+    
 }

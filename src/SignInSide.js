@@ -183,7 +183,7 @@ export default function SignInSide (props) {
   function goToMe(){ setView(3)};
 
   function SignInFormRoute(){
-    return <SignInForm classes={classes} handleClick={handleClick} goToMe={goToMe}/>
+    return <SignInForm handleChange={handleChange} classes={classes} handleClick={handleClick}/>
   }  
 
   function ForgotPasswordRoute(){
@@ -191,7 +191,7 @@ export default function SignInSide (props) {
   }  
 
   function RegisterRoute(){
-    return <Register classes={classes} handleClick={handleClick}/>
+    return <Register handleChange={handleChange} classes={classes} handleClick={handleClick}/>
   }  
 
   function MeRoute(){
@@ -308,27 +308,16 @@ export default function SignInSide (props) {
     return (
       
       <ThemeProvider theme={theme}>
-          <Grid container component="main" className={classes.root} fixed = {'true'}>
-          <CssBaseline />
-          <Grid item xs={false} sm={5} md={7} component={Paper} className={classes.image} elevation={7} square/>
-          <Grid item xs={12} sm={7} md={5} component={Paper} elevation={7} square >
-          <Grid container item justify="flex-end" direction="row">
-          <FormControlLabel
-          value="top"
-          control={<Switch
-            checked={state.checkedB}
-            onChange={handleChange('checkedB')}
-            value="checkedB"
-            color="primary"
-            inputProps={{ 'aria-label': 'primary checkbox' }}
-          />}
-          label={themeName}
-          labelPlacement="bottom"
-        />
-          </Grid>
-          {formView()}
-          </Grid>
-          </Grid>
+
+      <Router>
+
+      <Route path="/" exact component={SignInFormRoute}/>
+      <Route path="/register" exact component={RegisterRoute}/>
+
+
+      </Router>
+          
+          
       </ThemeProvider>
     );
 }

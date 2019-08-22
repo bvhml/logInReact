@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -20,6 +20,9 @@ import Typography from '@material-ui/core/Typography';
 import * as LinkRouter from "react-router-dom";
 import AuthHelperMethods from './AuthHelperMethods';
 import jwt from 'jwt-decode'
+import Paper from '@material-ui/core/Paper';
+import Switch from '@material-ui/core/Switch';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -48,43 +51,47 @@ export const validatorArg = new FormValidator([
 
 
 
-export default class SignInForm extends React.Component{
-    constructor(props){
-        super(props);
-        this.state ={
-            email:'',
-            password:'',
-            messageDialog:'',
-            showDialog:false,
-        };
+export default function SignInForm (props) {
 
-        this.handleClose = this.handleClose.bind(this);
+  let themeName = props.themeName;
+
+  const handleChange = props.handleChange;
+
+      const [state,setState] = useState({
+        email:'',
+        password:'',
+        messageDialog:'',
+        showDialog:false,
+      });
+
+        /*this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.emailInput = React.createRef();
         
-    }
+        */
+       let emailInput = React.createRef();
 
-    validationResponse =  {};
+    let validationResponse =  {};
 
-    focusInput(component) {
+    function focusInput(component) {
       if (component) {
           React.findDOMNode(component).focus(); 
       }
     }
     
-    Auth = new AuthHelperMethods();
-    componentWillMount(){
-      if (this.Auth.loggedIn()){
+    let Auth = new AuthHelperMethods();
+
+    useEffect(() =>{
+      if (Auth.loggedIn()){
         //this.props.history.replace('/');
         console.log("Ya inicie sesion");
-        const {goToMe} = this.props;
-        goToMe();
+        
       }
       else{
-        this.Auth.logout();
+        Auth.logout();
       }
-    }
-    handleSubmit(event){
+    });
+    
+    function handleSubmit(event){
      
       event.preventDefault();
 
@@ -92,10 +99,11 @@ export default class SignInForm extends React.Component{
       const email = event.target.email.value;
       const password = event.target.password.value;
 
-      this.setState({
+      setState(state => ({
+        ...state,
         email:email,
         password:password,
-      });
+      }));
 
 
 
@@ -103,53 +111,49 @@ export default class SignInForm extends React.Component{
 
     
 
-      this.validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
+      validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
 
       if (validation.isValid) {
         console.log("TODO BIEN");
           
 
-        this.Auth.login(email, password)
+        Auth.login(email, password)
           .then(res => {
             if (res.data.status === 400) {
-              this.setState({
+              setState(state => ({
+                ...state,
                 messageDialog:"Usuario/Password no son correctos",
                 showDialog:true,
-              });
+              }));
               //return alert("Usuario/Password no son correctos");
               
             }
             else if (res.data.status === 200){
-              if (this.Auth.loggedIn()){
+              if (Auth.loggedIn()){
                 //this.props.history.replace('/');
                 console.log("Ya inicie sesion");
-                const {goToMe} = this.props;
-                goToMe();
               }
               else{
-                this.Auth.logout();
+                Auth.logout();
               }
             }
             
-            console.log(res);
+            //console.log(res);
             //this.props.history.replace("/");
           })
           .catch(err => {
             //alert(err);
-            this.setState({
+            setState(state => ({
+              ...state,
               messageDialog:"Usuario/Password no son correctos",
               showDialog:true,
-            });
+            }));
           });
 
       }
       else{
         //if is Invalid
-        if (this.validationResponse.email) { 
-        }
-        else if (this.validationResponse.password) {
-          
-        }
+        
       }
       
       
@@ -157,39 +161,48 @@ export default class SignInForm extends React.Component{
 
       }
     
-      componentDidUpdate(){
 
-        
-        if (this.validationResponse.email) {
-          //console.log(this.emailInput.current);
-           
-        }
-        else if (this.validationResponse.password) {
-          
-        }
-      }
-
-      handleClose() { 
-        this.setState({
+      function handleClose() { 
+        setState(state => ({
+          ...state,
           showDialog:false
-        });
+        }));
       }
 
       
 
-    render(){
-        const {classes,handleClick} = this.props;
+   
+        const {classes,handleClick} = props;
         
         
         return(
-            <div className={classes.paper} spacing={5}>
+          <div>
+          <Grid container component="main" className={classes.root} fixed = {'true'}>
+          <CssBaseline />
+          <Grid item xs={false} sm={5} md={7} component={Paper} className={classes.image} elevation={7} square></Grid>
+            <Grid item xs={12} sm={7} md={5} component={Paper} elevation={7} square >
+              <Grid container item justify="flex-end" direction="row">
+                <FormControlLabel
+                value="top"
+                control={<Switch
+                  checked={state.checkedB}
+                  onChange={handleChange('checkedB')}
+                  value="checkedB"
+                  color="primary"
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                />}
+                label={themeName}
+                labelPlacement="bottom"
+              />
+              </Grid>
+              <div className={classes.paper} spacing={5}>
               <Avatar className={classes.avatar}>
                   <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
                   Sign in
               </Typography>
-              <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
+              <form className={classes.form} onSubmit={handleSubmit} noValidate>
                     <TextField
                     variant="outlined"
                     margin="dense"
@@ -200,8 +213,8 @@ export default class SignInForm extends React.Component{
                     name="email"
                     autoComplete="email"
                     autoFocus
-                    error={this.validationResponse.email}
-                    inputRef={this.emailInput}
+                    error={validationResponse.email}
+                    inputRef={emailInput}
                     
                     />
                     <TextField
@@ -214,15 +227,15 @@ export default class SignInForm extends React.Component{
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    error={this.validationResponse.password}
+                    error={validationResponse.password}
                     />
                     <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
                     />
                     <Dialog
-                      open={this.state.showDialog}
-                      onClose={this.handleClose}
+                      open={state.showDialog}
+                      onClose={handleClose}
                       TransitionComponent={Transition}
                       aria-labelledby="alert-dialog-title"
                       aria-describedby="alert-dialog-description"
@@ -232,11 +245,11 @@ export default class SignInForm extends React.Component{
                       <Info className={classes.icon} />
                         <DialogContentText id="alert-dialog-description" >
                           
-                          {this.state.messageDialog}
+                          {state.messageDialog}
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={this.handleClose} color="primary" autoFocus>
+                        <Button onClick={handleClose} color="primary" autoFocus>
                           Dismiss
                         </Button>
                       </DialogActions>
@@ -264,6 +277,10 @@ export default class SignInForm extends React.Component{
                     </Grid>
                 </form>
               </div>
+            </Grid>
+            </Grid>
+            </div>
+            
         );
-    }
+    
 }
