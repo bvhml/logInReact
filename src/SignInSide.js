@@ -1,19 +1,14 @@
 import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import blue from '@material-ui/core/colors/blue';
 import deepOrange from '@material-ui/core/colors/deepOrange';
-import {BrowserRouter as Router,Route,Link,Redirect,withRouter} from "react-router-dom";
+import {BrowserRouter as Router,Route,Redirect} from "react-router-dom";
 import SignInForm from './components/SignInForm'
 import ForgotPassword from './components/ForgotPassword'
 import Me from './components/Me'
 import Register from './components/Register'
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import AuthHelperMethods from './components/AuthHelperMethods';
 
 let theme = createMuiTheme({});
@@ -169,64 +164,6 @@ export default function SignInSide (props) {
     checkedB: true,
   });
 
-  const [view, setView] = React.useState(0);
-
-  //const [greeting, setGreeting] = React.useState('Hello World');
-
-  const handleClick = name => event => {
-    event.preventDefault();
-
-    if (name === "signIn") {
-      setView(0);
-    }
-    else if (name === "forgotPassword"){
-      setView(1);
-    }
-    else if(name === "register"){
-      setView(2);
-    }
-    else if (name === "me"){
-      setView(3);
-    }
-
-  }
-
-  function SignInFormRoute(){
-    return <SignInForm handleChange={handleChange} classes={classes} handleClick={handleClick} PrivateRoute={PrivateRoute}/>
-  }  
-
-  function ForgotPasswordRoute(){
-    return <ForgotPassword classes={classes} handleClick={handleClick}/>
-  }  
-
-  function RegisterRoute(){
-    return <Register handleChange={handleChange} classes={classes} handleClick={handleClick}/>
-  }  
-
-  function ProtectedRoute(){
-    return <Me handleChange={handleChange} classes={classes} handleClick={handleClick}/>
-  }  
-
-  
-  function PrivateRoute({ component: Component, ...rest }) {
-    return (
-      <Route
-        {...rest}
-        render={props =>
-          Auth.loggedIn() ? (
-            <Component {...props} />
-          ) : (
-            <Redirect
-              to={{
-                pathname: "/"
-              }}
-            />
-          )
-        }
-      />
-    );
-  }
-
   const handleChange = name => event => {
     setTema({ ...tema, [name]: event.target.checked });
 
@@ -315,6 +252,49 @@ export default function SignInSide (props) {
     }
 
     };
+ 
+
+  //const [greeting, setGreeting] = React.useState('Hello World');
+
+
+  function SignInFormRoute(){
+    return <SignInForm handleChange={handleChange} classes={classes} themeName={themeName}/>
+  }  
+
+  // eslint-disable-next-line
+  function ForgotPasswordRoute(){
+    return <ForgotPassword classes={classes} />
+  }  
+
+  function RegisterRoute(){
+    return <Register handleChange={handleChange} classes={classes} themeName={themeName}/>
+  }  
+
+  function ProtectedRoute(){
+    return <Me handleChange={handleChange} classes={classes} themeName={themeName}/>
+  }  
+
+  
+  function PrivateRoute({ component: Component, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={props =>
+          Auth.loggedIn() ? (
+            <Component {...props} />
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/"
+              }}
+            />
+          )
+        }
+      />
+    );
+  }
+
+  
 
     return (
       
@@ -322,7 +302,7 @@ export default function SignInSide (props) {
         <Router>
           <Route path="/" exact component={SignInFormRoute}/>
           <Route path="/register" exact component={RegisterRoute}/>
-          <PrivateRoute path="/Me" component={ProtectedRoute} />
+          <PrivateRoute path="/me" component={ProtectedRoute} />
         </Router>
       </ThemeProvider>
     );

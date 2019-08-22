@@ -39,11 +39,28 @@ export default class AuthHelperMethods {
           password: password,
           nombre:nombre,
           apellido:apellido,
-        })
+        },config)
         .then(this._checkStatus)
         .then(response => response);
   
       }
+
+      validateMe = () => {
+        // Get a token from api server using the fetch api
+        var config = {};
+        if (this.loggedIn()) {
+            config = {
+                headers: { Authorization: "bearer " + this.getToken() }
+              };
+        }
+    
+        return axios.get('http://localhost/me', {
+            jwt:this.getToken(),
+          },config)
+          .then(this._checkStatus)
+          .then(response => response);
+    
+        }
 
   loggedIn = () => {
     // Checks if there is a saved token and it's still valid

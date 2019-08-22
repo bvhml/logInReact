@@ -18,13 +18,11 @@ import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import * as LinkRouter from "react-router-dom";
-import {BrowserRouter as Router,Route,Redirect,withRouter} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import AuthHelperMethods from './AuthHelperMethods';
-import jwt from 'jwt-decode'
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Me from './Me'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -52,12 +50,13 @@ export const validatorArg = new FormValidator([
 ]);
 
 
+let validationResponse =  {};
 
 export default function SignInForm (props) {
 
   let themeName = props.themeName;
 
-  const handleChange = props.handleChange;
+  
 
       const [state,setState] = useState({
         email:'',
@@ -72,24 +71,19 @@ export default function SignInForm (props) {
         */
        let emailInput = React.createRef();
 
-    let validationResponse =  {};
-
-    function focusInput(component) {
-      if (component) {
-          React.findDOMNode(component).focus(); 
-      }
-    }
+  
     
     let Auth = new AuthHelperMethods();
 
     useEffect(() =>{
-      if (Auth.loggedIn()){
+      let Authenticate = new AuthHelperMethods();
+      if (Authenticate.loggedIn()){
         //this.props.history.replace('/');
         console.log("Ya inicie sesion");
       }
       else{
         console.log("No inicie sesion");
-        Auth.logout();
+        Authenticate.logout();
       }
     }, []);
     
@@ -100,16 +94,12 @@ export default function SignInForm (props) {
 
       const email = event.target.email.value;
       const password = event.target.password.value;
-
-      
-
-
-
       const validation = validatorArg.validate({email:email,password:password});
 
     
 
       validationResponse = {email: validation.email.isInvalid,password:validation.password.isInvalid}
+      
 
       if (validation.isValid) {
         console.log("TODO BIEN");
@@ -129,13 +119,13 @@ export default function SignInForm (props) {
             else if (res.data.status === 200){
               
                 //this.props.history.replace('/');
-                console.log("Ya inicie sesion Sign In");
+                console.log("Respuesto correcta de Log In");
+                
                 setState(state => ({
                   ...state,
                   email:email,
                   password:password,
                 }));
-             
             }
           })
           .catch(err => {
@@ -173,9 +163,9 @@ export default function SignInForm (props) {
       
 
    
-        const {classes,handleClick} = props;
+        const {classes,handleChange} = props;
         
-        let { from } = { from: { pathname: "/Me" } };
+        let { from } = { from: { pathname: "/me" } };
     
 
         if (Auth.loggedIn()) {
@@ -273,7 +263,7 @@ export default function SignInForm (props) {
                     <Grid container>
                     <Grid item xs>
                       
-                    <Link href="#" className={classes.Link} onClick={handleClick('forgotPassword')}>
+                    <Link href="#" className={classes.Link} >
                         Forgot password?
                     </Link>
                     </Grid>

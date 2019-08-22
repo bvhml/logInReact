@@ -42,6 +42,7 @@ const jwtMW = exjwt({
 
 app.use('/session', routes.session);
 app.use('/users', routes.user);
+app.use('/me', routes.me);
 //app.use('/messages', routes.message);
 
 // Start

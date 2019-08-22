@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
@@ -52,7 +51,6 @@ export const validatorArg = new FormValidator([
     validWhen: false,
     message: 'Nombre required.'
   },
-  ,
   { 
     field: 'nombre',
     method: validator.isEmpty,
@@ -74,7 +72,7 @@ export const validatorArg = new FormValidator([
 ]);
 
 
-
+let validationResponse =  {};
 export default function Register (props){
 
         let themeName = props.themeName;
@@ -96,24 +94,19 @@ export default function Register (props){
         
     
 
-    let validationResponse =  {};
-
-    function focusInput(component) {
-      if (component) {
-          React.findDOMNode(component).focus(); 
-      }
-    }
+    
 
     let Auth = new AuthHelperMethods();
     
     useEffect(() =>{
-      if (Auth.loggedIn()){
+      let Authenticate = new AuthHelperMethods();
+      if (Authenticate.loggedIn()){
         //this.props.history.replace('/');
         console.log("Ya inicie sesion");
        
       }
       else{
-        Auth.logout();
+        Authenticate.logout();
       }
     },[]);
 
@@ -203,7 +196,7 @@ export default function Register (props){
       }
 
       
-        const {classes,handleClick} = props;
+        const {classes} = props;
         
         
         return(
@@ -305,7 +298,6 @@ export default function Register (props){
                       <Info className={classes.icon} />
                       </Avatar>
                         <DialogContentText id="alert-dialog-description" style={{color:'white'}}>
-                          
                           {state.messageDialog}
                         </DialogContentText>
                       </DialogContent>
