@@ -189,6 +189,7 @@ export default function SignInForm (props) {
         if (Auth.loggedIn()) {
           return <Redirect to={from}/>;
         }
+        
         return(
           <div>
           <Grid container component="main" className={classes.root} fixed = {'true'}>
@@ -305,7 +306,7 @@ export default function SignInForm (props) {
                     <MadeBy name="from Guatemala" style={{color:'white',fontSize:'40e'}} />
                     
                     <Grid item xs sm md  elevation={7} width={500} >
-                    <Link href='https://github.com/bvhml' className={classes.Link} style={{fontSize:'40e'}} >Git Hub</Link>
+                    <Link href='https://github.com/bvhml' className={classes.Link} style={{fontSize:50}} >Git Hub</Link>
                     </Grid>
                     </Grid>
                   </Grid>

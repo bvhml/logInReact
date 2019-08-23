@@ -21,6 +21,7 @@ import Switch from '@material-ui/core/Switch';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import * as LinkRouter from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -73,6 +74,7 @@ export const validatorArg = new FormValidator([
 
 
 let validationResponse =  {};
+let registrado = false;
 export default function Register (props){
 
         let themeName = props.themeName;
@@ -101,6 +103,8 @@ export default function Register (props){
     
     useEffect(() =>{
       let Authenticate = new AuthHelperMethods();
+
+      
       if (Authenticate.loggedIn()){
         //this.props.history.replace('/');
         console.log("Ya inicie sesion");
@@ -190,6 +194,11 @@ export default function Register (props){
     
 
       function handleClose() { 
+
+        if (state.messageDialog === 'Creado con exito'){
+          registrado = true;
+        }
+
         setState(state => ({
           ...state,
           showDialog:false
@@ -199,6 +208,13 @@ export default function Register (props){
       
         const {classes} = props;
         
+        let { from } = { from: { pathname: "/" } };
+        if(state.messageDialog !== 'Creado con exito'){
+          registrado = false;
+        }
+        if (registrado) {
+          return <Redirect to={from}/>;
+        }
         
         return(
           <div>
