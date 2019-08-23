@@ -314,7 +314,7 @@ export default function Register (props){
                       <Avatar  className={classes.bigAvatar} >
                       <Info className={classes.icon} />
                       </Avatar>
-                        <DialogContentText id="alert-dialog-description" style={{color:'white'}}>
+                        <DialogContentText id="alert-dialog-description" className={classes.DialogContentText}>
                           {state.messageDialog}
                         </DialogContentText>
                       </DialogContent>

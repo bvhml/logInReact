@@ -189,7 +189,7 @@ export default function SignInForm (props) {
         if (Auth.loggedIn()) {
           return <Redirect to={from}/>;
         }
-        
+
         return(
           <div>
           <Grid container component="main" className={classes.root} fixed = {'true'}>
@@ -260,7 +260,7 @@ export default function SignInForm (props) {
                       <Avatar  className={classes.bigAvatar} >
                       <Info className={classes.icon} />
                       </Avatar>
-                        <DialogContentText id="alert-dialog-description" style={{color:'white'}}>
+                        <DialogContentText id="alert-dialog-description" className={classes.DialogContentText}>
                           {state.messageDialog}
                         </DialogContentText>
                       </DialogContent>

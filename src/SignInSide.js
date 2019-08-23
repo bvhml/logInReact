@@ -66,6 +66,10 @@ let useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     width:400,
+    color: 'white',
+  },
+  DialogContentText:{
+    color:blue[400],
   },
   Link: {
     color:blue[400],
