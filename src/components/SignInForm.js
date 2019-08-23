@@ -23,6 +23,24 @@ import AuthHelperMethods from './AuthHelperMethods';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { Parallax } from "react-parallax";
+import MadeBy from './MadeBy'
+
+const styles = {
+  fontFamily: "sans-serif",
+  textAlign: "center"
+};
+const insideStyles = {
+  background: "white",
+  padding: 20,
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%,-50%)"
+};
+
+const image1 =
+'https://source.unsplash.com/random';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -277,6 +295,24 @@ export default function SignInForm (props) {
               </div>
             </Grid>
             </Grid>
+            <div style={styles}>
+              
+              <Parallax bgImage={image1} strength={500}>
+                <div style={{ height: '100vh'}}>
+                  <Grid component="main"  className={classes.root} fixed = {'true'} style={{color:'white',backgroundColor:'transparent',padding: '10vh'}}>
+                  <CssBaseline />
+                    <Grid item xs sm mdcomponent={Paper} className={classes.MadeBy} elevation={7}  >
+                    <MadeBy name="from Guatemala" style={{color:'white',fontSize:'40e'}} />
+                    
+                    <Grid item xs sm md  elevation={7} width={500} >
+                    <Link href='https://github.com/bvhml' className={classes.Link} style={{fontSize:'40e'}} >Git Hub</Link>
+                    </Grid>
+                    </Grid>
+                  </Grid>
+                  
+                </div>
+              </Parallax>
+              </div>
             </div>
             
         );

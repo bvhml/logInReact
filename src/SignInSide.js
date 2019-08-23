@@ -70,6 +70,12 @@ let useStyles = makeStyles(theme => ({
   Link: {
     color:blue[400],
   },
+  MadeBy: {
+    margin: theme.spacing(8, 1), //8,1
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 }));
 
 //--------------------DARK THEME--------------------
