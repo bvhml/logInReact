@@ -107,7 +107,7 @@ export default function Register (props){
       
       if (Authenticate.loggedIn()){
         //this.props.history.replace('/');
-        console.log("Ya inicie sesion");
+        //console.log("Ya inicie sesion");
        
       }
       else{
@@ -137,7 +137,7 @@ export default function Register (props){
      
 
       if (validation.isValid) {
-        console.log("TODO BIEN");
+        //console.log("TODO BIEN");
           
         Auth.signUp(email, password,nombre,apellido)
           .then(res => {
@@ -160,7 +160,7 @@ export default function Register (props){
             
             
 
-            console.log(res);
+            //console.log(res);
             //props.history.replace("/");
           })
           .catch(err => {
@@ -197,8 +197,8 @@ export default function Register (props){
 
         if (state.messageDialog === 'Creado con exito'){
           registrado = true;
+          
         }
-
         setState(state => ({
           ...state,
           showDialog:false

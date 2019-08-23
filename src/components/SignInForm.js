@@ -30,14 +30,6 @@ const styles = {
   fontFamily: "sans-serif",
   textAlign: "center"
 };
-const insideStyles = {
-  background: "white",
-  padding: 20,
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%,-50%)"
-};
 
 const image1 =
 'https://source.unsplash.com/random';
@@ -97,10 +89,10 @@ export default function SignInForm (props) {
       let Authenticate = new AuthHelperMethods();
       if (Authenticate.loggedIn()){
         //this.props.history.replace('/');
-        console.log("Ya inicie sesion");
+        //console.log("Ya inicie sesion");
       }
       else{
-        console.log("No inicie sesion");
+        //console.log("No inicie sesion");
         Authenticate.logout();
       }
     }, []);
@@ -120,7 +112,7 @@ export default function SignInForm (props) {
       
 
       if (validation.isValid) {
-        console.log("TODO BIEN");
+        //console.log("TODO BIEN");
           
 
         Auth.login(email, password)

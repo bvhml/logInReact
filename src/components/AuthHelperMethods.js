@@ -41,13 +41,15 @@ export default class AuthHelperMethods {
           apellido:apellido,
         },config)
         .then(this._checkStatus)
-        .then(response => response);
+        .then(response => {
+          this.login(username,password);
+        });
   
       }
 
       validateMe = () => {
         // Get a token from api server using the fetch api
-        console.log(this.getToken());
+        //console.log(this.getToken());
         if (this.getToken() !== 'undefined') {
           const instance = axios.create({
             baseURL: 'http://localhost',
