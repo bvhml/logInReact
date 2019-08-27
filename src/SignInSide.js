@@ -75,10 +75,11 @@ let useStyles = makeStyles(theme => ({
     color:blue[400],
   },
   MadeBy: {
-    margin: theme.spacing(8, 1), //8,1
+    margin: theme.spacing(8,1), //8,1
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    backgroundColor:'#2b2a2a',
   },
 }));
 

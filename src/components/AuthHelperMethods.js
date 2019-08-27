@@ -5,7 +5,7 @@ export default class AuthHelperMethods {
   // Initializing important variables
   constructor(domain) {
     //THIS LINE IS ONLY USED WHEN YOU'RE IN PRODUCTION MODE!
-    this.domain = domain || "http://localhost:80"; // API server domain
+    this.domain = domain || "http://3.16.57.87:80"; // API server domain
   }
   login = (username, password) => {
     // Get a token from api server using the fetch api
@@ -16,7 +16,7 @@ export default class AuthHelperMethods {
           };
     }
 
-    return axios.post('http://localhost/users/login', {
+    return axios.post('http://3.16.57.87/users/login', {
         email: username,
         password: password
       },config)
@@ -34,7 +34,7 @@ export default class AuthHelperMethods {
             };
       }
   
-      return axios.post('http://localhost/users/register', {
+      return axios.post('http://3.16.57.87/users/register', {
           email: username,
           password: password,
           nombre:nombre,
@@ -52,7 +52,7 @@ export default class AuthHelperMethods {
         //console.log(this.getToken());
         if (this.getToken() !== 'undefined') {
           const instance = axios.create({
-            baseURL: 'http://localhost',
+            baseURL: 'http://3.16.57.87',
             timeout: 1000,
             headers: {'Authorization': 'Bearer '+this.getToken() }
           });

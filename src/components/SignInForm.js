@@ -80,8 +80,6 @@ export default function SignInForm (props) {
         
         */
        let emailInput = React.createRef();
-
-  
     
     let Auth = new AuthHelperMethods();
 
@@ -292,14 +290,12 @@ export default function SignInForm (props) {
               
               <Parallax bgImage={image1} strength={500}>
                 <div style={{ height: '100vh'}}>
-                  <Grid component="main"  className={classes.root} fixed = {'true'} style={{color:'white',backgroundColor:'transparent',padding: '10vh'}}>
+                  <Grid component="main"  className={classes.root} fixed = {'true'} style={{color:'white',backgroundColor:'transparent',padding: '30vh'}}>
                   <CssBaseline />
-                    <Grid item xs sm mdcomponent={Paper} className={classes.MadeBy} elevation={7}  >
-                    <MadeBy name="from Guatemala" style={{color:'white',fontSize:'40e'}} />
-                    
-                    <Grid item xs sm md  elevation={7} width={500} >
-                    <Link href='https://github.com/bvhml' className={classes.Link} style={{fontSize:50}} >Git Hub</Link>
-                    </Grid>
+                    <Grid item xs={false} sm={false} md component={Paper} className={classes.MadeBy} elevation={7} style={{color:'white'}} >
+                    <MadeBy name="from Guatemala" style={{color:'white',fontSize:'20'}} />
+                    <Link href='https://github.com/bvhml' className={classes.Link} style={{fontSize:30}} >Git Hub</Link>
+                   
                     </Grid>
                   </Grid>
                   
