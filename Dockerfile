@@ -11,6 +11,6 @@ RUN npm install
 # Bundle app source
 COPY . .
 EXPOSE 80:80
-RUN nodemon --exec babel-node src/express.js
+CMD [ "npm", "run", "start" ]
 
 
