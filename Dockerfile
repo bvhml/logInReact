@@ -6,9 +6,10 @@ WORKDIR /app
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install && npm run dev
+RUN npm install
 
 # Bundle app source
 COPY . .
 
+RUN npm run dev
 EXPOSE 80
