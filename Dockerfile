@@ -9,6 +9,6 @@ COPY package*.json ./
 RUN npm install && npm run dev
 
 # Bundle app source
-COPY . /app
+COPY . .
 
 EXPOSE 80
