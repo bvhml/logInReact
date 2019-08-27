@@ -11,6 +11,6 @@ RUN npm install
 # Bundle app source
 COPY . .
 EXPOSE 80:80
-RUN npm run dev
+CMD [ "node", "express.js" ]
 
 
