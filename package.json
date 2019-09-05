@@ -18,6 +18,7 @@
     "pg-hstore": "^2.3.3",
     "pg-promise": "^9.0.3",
     "react": "^16.8.6",
+    "react-acrylic": "^0.1.1",
     "react-dom": "^16.8.6",
     "react-parallax": "^2.2.0",
     "react-router-dom": "^5.0.1",
@@ -26,7 +27,7 @@
     "validator": "^11.1.0"
   },
   "scripts": {
-    "start": "nodemon --exec babel-node src/express.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

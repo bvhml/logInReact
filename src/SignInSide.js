@@ -19,6 +19,17 @@ let useStyles = makeStyles(theme => ({
     height:'100vh',
     padding: '6vh',
   },
+  footer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    //background: 'linear-gradient(to right bottom, #2c3e50, #82ffa1)',
+    backgroundColor: 'transparent',
+    height: '100vh',
+    alignItems: 'center',
+  },
   image: {
     backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
@@ -37,6 +48,18 @@ let useStyles = makeStyles(theme => ({
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
+  },
+  photo: {
+    margin: 10,
+    width: 100,
+    height: 100,
+  },
+  bigPhoto: {
+    margin: 10,
+    width: 75,
+    height: 75,
+    background: theme.palette.background.paper,
+    color: 'red',
   },
   bigAvatar: {
     margin: 10,
@@ -75,11 +98,10 @@ let useStyles = makeStyles(theme => ({
     color:blue[400],
   },
   MadeBy: {
-    margin: theme.spacing(8,1), //8,1
+    color:'white',
+    backgroundColor:'transparent',
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor:'#2b2a2a',
+    justifyContent: 'center',
   },
 }));
 

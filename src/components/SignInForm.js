@@ -25,6 +25,7 @@ import Switch from '@material-ui/core/Switch';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Parallax } from "react-parallax";
 import MadeBy from './MadeBy'
+import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = {
   fontFamily: "sans-serif",
@@ -33,6 +34,8 @@ const styles = {
 
 const image1 =
 'https://source.unsplash.com/random';
+
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -287,19 +290,42 @@ export default function SignInForm (props) {
             </Grid>
             </Grid>
             <div style={styles}>
-              
               <Parallax bgImage={image1} strength={500}>
-                <div style={{ height: '100vh'}}>
-                  <Grid component="main"  className={classes.root} fixed = {'true'} style={{color:'white',backgroundColor:'transparent',padding: '30vh'}}>
-                  <CssBaseline />
-                    <Grid item xs={false} sm={false} md component={Paper} className={classes.MadeBy} elevation={7} style={{color:'white'}} >
-                    <MadeBy name="from Guatemala" style={{color:'white',fontSize:'20'}} />
-                    <Link href='https://github.com/bvhml' className={classes.Link} style={{fontSize:30}} >Git Hub</Link>
-                   
-                    </Grid>
+                <Grid container className={classes.footer}>
+                  <Grid container className={classes.MadeBy} >
+                      <Grid item container className={classes.MadeBy} >
+                        <Grid item className={classes.MadeBy}>
+                        <Avatar alt="Avatar" src={require("../static/images/facetigo.jpg")} className={classes.photo} />
+                        </Grid>
+                        <Grid className={classes.MadeBy}>
+                        <MadeBy name="from Guatemala" style={{color:'white',fontSize:'20vh'}}/>
+                        </Grid>
+                      </Grid>
+                      <Grid item container className={classes.MadeBy}>
+                      <Tooltip title="GitHub">
+                          <Link href='https://github.com/bvhml' target="_blank" className={classes.Link} style={{fontSize:30}} >
+                            <Grid className={classes.MadeBy}>
+                            <Avatar alt="Avatar" src={require("../static/images/gitHubLogo.png")} className={classes.bigPhoto} />
+                            </Grid>
+                          </Link>
+                      </Tooltip>
+                      <Tooltip title="linkedIn">
+                        <Link href='https://www.linkedin.com/in/victorh-morales-gt' target="_blank" className={classes.Link} style={{fontSize:30}} >
+                          <Grid className={classes.MadeBy}>
+                          <Avatar alt="Avatar" src={require("../static/images/linkedin.png")} className={classes.bigPhoto} />
+                          </Grid>
+                        </Link>
+                      </Tooltip>
+                      <Tooltip title="facebook">
+                        <Link href='https://www.facebook.com/victorhmoralesgt' target="_blank" className={classes.Link} style={{fontSize:30}} >
+                          <Grid className={classes.MadeBy}>
+                          <Avatar alt="Avatar" src={require("../static/images/facebook.png")} className={classes.bigPhoto} />
+                          </Grid>
+                        </Link>
+                      </Tooltip>
+                      </Grid>
                   </Grid>
-                  
-                </div>
+                </Grid>
               </Parallax>
               </div>
             </div>
