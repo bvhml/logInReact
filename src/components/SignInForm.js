@@ -26,6 +26,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Parallax } from "react-parallax";
 import MadeBy from './MadeBy'
 import Tooltip from '@material-ui/core/Tooltip';
+import BackdropFilter from "react-backdrop-filter";
 
 const styles = {
   fontFamily: "sans-serif",
@@ -290,10 +291,20 @@ export default function SignInForm (props) {
             </Grid>
             </Grid>
             <div style={styles}>
-              <Parallax bgImage={image1} strength={500}>
+              <Parallax bgImage={image1} strength={500}  blur={5}>
                 <Grid container className={classes.footer}>
-                  <Grid container className={classes.MadeBy} >
-                      <Grid item container className={classes.MadeBy} >
+                  <BackdropFilter
+                    className={classes.bluredForm}
+                    filter={"blur(10px) sepia(50%)"}
+                    html2canvasOpts={{
+                        allowTaint: true
+                    }}
+                    onDraw={() => {
+                        console.log("Rendered !");
+                    }}
+                    >
+                    <Grid container className={classes.ContainerFooter}>
+                      <Grid item container className={classes.MadeBy}>
                         <Grid item className={classes.MadeBy}>
                         <Avatar alt="Avatar" src={require("../static/images/facetigo.jpg")} className={classes.photo} />
                         </Grid>
@@ -324,7 +335,8 @@ export default function SignInForm (props) {
                         </Link>
                       </Tooltip>
                       </Grid>
-                  </Grid>
+                    </Grid>
+                  </BackdropFilter>
                 </Grid>
               </Parallax>
               </div>

@@ -31,7 +31,7 @@ let useStyles = makeStyles(theme => ({
     alignItems: 'center',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    //backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -88,7 +88,10 @@ let useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    width:400,
+    justifyContent:'center',
+    width:'50vw',
+    maxWidth:400,
+    minWidth:220,
     color: 'white',
   },
   DialogContentText:{
@@ -102,6 +105,14 @@ let useStyles = makeStyles(theme => ({
     backgroundColor:'transparent',
     display: 'flex',
     justifyContent: 'center',
+  },
+  ContainerFooter: {
+    backgroundColor:'transparent',
+  },
+  bluredForm: {
+    width: 'auto',
+    borderRadius: '5px',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
   },
 }));
 
@@ -132,7 +143,7 @@ theme = createMuiTheme({
         backgroundColor:'#2b2a2a',
       },
       item:{
-        backgroundColor:'#303030',
+        //backgroundColor:'#303030',
       },
       
     },
@@ -160,9 +171,9 @@ theme = createMuiTheme({
       notchedOutline: {
         borderWidth: "1px",
         borderColor: blue[400],
-        '&$hover': {
-          borderColor:"white",
-          borderWidth: 2,
+        '&:hover': {
+          borderColor: blue[100],
+          borderWidth: 1,
         },
       },
     },

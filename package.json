@@ -19,6 +19,7 @@
     "pg-promise": "^9.0.3",
     "react": "^16.8.6",
     "react-acrylic": "^0.1.1",
+    "react-backdrop-filter": "^2.0.0",
     "react-dom": "^16.8.6",
     "react-parallax": "^2.2.0",
     "react-router-dom": "^5.0.1",
