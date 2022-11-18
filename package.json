@@ -23,7 +23,7 @@
     "react-dom": "^16.8.6",
     "react-parallax": "^2.2.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
+    "react-scripts": "5.0.1",
     "sequelize": "^5.15.2",
     "validator": "^11.1.0"
   },
